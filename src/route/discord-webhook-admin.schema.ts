@@ -7,7 +7,7 @@ const DescriptionSchema = z.string().max(200).openapi({
   example: "production alerts",
 });
 
-const UuidSchema = z.string().min(1).openapi({
+const UuidSchema = z.uuid().openapi({
   description: "リソースの UUID",
   example: "9b559796-108a-4dbb-a9da-946fea59d62f",
 });

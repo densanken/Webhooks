@@ -10,9 +10,9 @@ import { createDiscordWebhookAdminRoute } from "./discord-webhook-admin.ts";
 import { createTokenAdminRoute } from "./token-admin.ts";
 
 const API_KEY = "test-api-key";
-const REGISTERED_UUID = "registered-1";
+const REGISTERED_UUID = "11111111-1111-1111-8111-111111111111";
 const PATH_TOKEN = "path-token";
-const DYNAMIC_TOKEN_UUID = "token-1";
+const DYNAMIC_TOKEN_UUID = "22222222-2222-2222-8222-222222222222";
 const DYNAMIC_TOKEN = "a".repeat(43);
 
 const createTestRoutes = () => {
@@ -236,7 +236,7 @@ Deno.test("登録済み Discord Webhook 管理ルートは Webhook を管理で�
   });
 
   const missingUpdateResponse = await app.request(
-    `/api/discord/webhooks/non-existent-uuid`,
+    `/api/discord/webhooks/33333333-3333-3333-8333-333333333333`,
     {
       method: "PATCH",
       headers: authorizedHeaders({ "Content-Type": "application/json" }),
@@ -309,7 +309,7 @@ Deno.test("動的 Webhook 用トークン管理ルートはトークンを管理
   });
 
   const missingUpdateResponse = await app.request(
-    `/api/tokens/non-existent-uuid`,
+    `/api/tokens/33333333-3333-3333-8333-333333333333`,
     {
       method: "PATCH",
       headers: authorizedHeaders({ "Content-Type": "application/json" }),
