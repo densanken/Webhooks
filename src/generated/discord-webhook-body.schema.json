@@ -1,0 +1,1525 @@
+{
+  "$ref": "#/definitions/DiscordWebhookBody",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "APIActionRowComponent<APIComponentInMessageActionRow>": {
+      "additionalProperties": false,
+      "description": "An Action Row is a top-level layout component used in messages. Use in modals is deprecated.",
+      "properties": {
+        "components": {
+          "description": "The components in the ActionRow",
+          "items": {
+            "$ref": "#/definitions/APIComponentInMessageActionRow"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "type": {
+          "const": 1,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "components",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIAllowedMentions": {
+      "additionalProperties": false,
+      "properties": {
+        "parse": {
+          "description": "An array of allowed mention types to parse from the content",
+          "items": {
+            "$ref": "#/definitions/AllowedMentionsTypes"
+          },
+          "type": "array"
+        },
+        "replied_user": {
+          "description": "For replies, whether to mention the author of the message being replied to",
+          "type": "boolean"
+        },
+        "roles": {
+          "description": "Array of role_ids to mention (Max size of 100)",
+          "items": {
+            "$ref": "#/definitions/Snowflake"
+          },
+          "type": "array"
+        },
+        "users": {
+          "description": "Array of user_ids to mention (Max size of 100)",
+          "items": {
+            "$ref": "#/definitions/Snowflake"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "APIBaseAutoPopulatedSelectMenuComponent<enum-1563248724-32437-32501-1563248724-31978-34083-1563248724-0-68149321778361,enum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149>": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_id": {
+          "description": "A developer-defined identifier for the select menu, max 100 characters",
+          "type": "string"
+        },
+        "default_values": {
+          "description": "List of default values for auto-populated select menu components",
+          "items": {
+            "$ref": "#/definitions/APISelectMenuDefaultValue%3Cenum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149%3E"
+          },
+          "type": "array"
+        },
+        "disabled": {
+          "description": "Disable the select",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "max_values": {
+          "description": "The maximum number of items that can be chosen; max 25",
+          "type": "number"
+        },
+        "min_values": {
+          "description": "The minimum number of items that must be chosen; min 0, max 25",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "Custom placeholder text if nothing is selected, max 150 characters",
+          "type": "string"
+        },
+        "required": {
+          "description": "Whether the component is required to answer in a modal.",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 5,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIBaseAutoPopulatedSelectMenuComponent<enum-1563248724-32502-32566-1563248724-31978-34083-1563248724-0-68149321891214,enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149>": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_id": {
+          "description": "A developer-defined identifier for the select menu, max 100 characters",
+          "type": "string"
+        },
+        "default_values": {
+          "description": "List of default values for auto-populated select menu components",
+          "items": {
+            "$ref": "#/definitions/APISelectMenuDefaultValue%3Cenum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149%3E"
+          },
+          "type": "array"
+        },
+        "disabled": {
+          "description": "Disable the select",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "max_values": {
+          "description": "The maximum number of items that can be chosen; max 25",
+          "type": "number"
+        },
+        "min_values": {
+          "description": "The minimum number of items that must be chosen; min 0, max 25",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "Custom placeholder text if nothing is selected, max 150 characters",
+          "type": "string"
+        },
+        "required": {
+          "description": "Whether the component is required to answer in a modal.",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 6,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIBaseAutoPopulatedSelectMenuComponent<enum-1563248724-32567-32648-1563248724-31978-34083-1563248724-0-681491963567245,(enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149|enum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149)>": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_id": {
+          "description": "A developer-defined identifier for the select menu, max 100 characters",
+          "type": "string"
+        },
+        "default_values": {
+          "description": "List of default values for auto-populated select menu components",
+          "items": {
+            "$ref": "#/definitions/APISelectMenuDefaultValue%3C(enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149%7Cenum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149)%3E"
+          },
+          "type": "array"
+        },
+        "disabled": {
+          "description": "Disable the select",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "max_values": {
+          "description": "The maximum number of items that can be chosen; max 25",
+          "type": "number"
+        },
+        "min_values": {
+          "description": "The minimum number of items that must be chosen; min 0, max 25",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "Custom placeholder text if nothing is selected, max 150 characters",
+          "type": "string"
+        },
+        "required": {
+          "description": "Whether the component is required to answer in a modal.",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 7,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIBasePollAnswer": {
+      "additionalProperties": false,
+      "properties": {
+        "poll_media": {
+          "$ref": "#/definitions/APIPollMedia",
+          "description": "The data of the answer"
+        }
+      },
+      "required": [
+        "poll_media"
+      ],
+      "type": "object"
+    },
+    "APIButtonComponent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIButtonComponentWithCustomId"
+        },
+        {
+          "$ref": "#/definitions/APIButtonComponentWithSKUId"
+        },
+        {
+          "$ref": "#/definitions/APIButtonComponentWithURL"
+        }
+      ],
+      "description": "A Button is an interactive component that can only be used in messages. It creates clickable elements that users can interact with, sending an interaction to your app when clicked.\n\nButtons must be placed inside an Action Row or a Section's accessory field."
+    },
+    "APIButtonComponentWithCustomId": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_id": {
+          "description": "The custom_id to be sent in the interaction when clicked",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "The status of the button",
+          "type": "boolean"
+        },
+        "emoji": {
+          "$ref": "#/definitions/APIMessageComponentEmoji",
+          "description": "The emoji to display to the left of the text"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "label": {
+          "description": "The label to be displayed on the button",
+          "type": "string"
+        },
+        "style": {
+          "anyOf": [
+            {
+              "const": 4,
+              "description": "An action with irreversible consequences",
+              "type": "number"
+            },
+            {
+              "const": 1,
+              "description": "The most important or recommended action in a group of options",
+              "type": "number"
+            },
+            {
+              "const": 2,
+              "description": "Alternative or supporting actions",
+              "type": "number"
+            },
+            {
+              "const": 3,
+              "description": "Positive confirmation or completion actions",
+              "type": "number"
+            }
+          ],
+          "description": "The style of the button"
+        },
+        "type": {
+          "const": 2,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "style",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIButtonComponentWithSKUId": {
+      "additionalProperties": false,
+      "properties": {
+        "disabled": {
+          "description": "The status of the button",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "sku_id": {
+          "$ref": "#/definitions/Snowflake",
+          "description": "The id for a purchasable SKU"
+        },
+        "style": {
+          "const": 6,
+          "description": "The style of the button",
+          "type": "number"
+        },
+        "type": {
+          "const": 2,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "sku_id",
+        "style",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIButtonComponentWithURL": {
+      "additionalProperties": false,
+      "properties": {
+        "disabled": {
+          "description": "The status of the button",
+          "type": "boolean"
+        },
+        "emoji": {
+          "$ref": "#/definitions/APIMessageComponentEmoji",
+          "description": "The emoji to display to the left of the text"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "label": {
+          "description": "The label to be displayed on the button",
+          "type": "string"
+        },
+        "style": {
+          "const": 5,
+          "description": "The style of the button",
+          "type": "number"
+        },
+        "type": {
+          "const": 2,
+          "description": "The type of the component",
+          "type": "number"
+        },
+        "url": {
+          "description": "The URL to direct users to when clicked for Link buttons",
+          "type": "string"
+        }
+      },
+      "required": [
+        "style",
+        "type",
+        "url"
+      ],
+      "type": "object"
+    },
+    "APIChannelSelectComponent": {
+      "additionalProperties": false,
+      "description": "A Channel Select is an interactive component that allows users to select one or more channels in a message. Options are automatically populated based on available channels in the server and can be filtered by channel types.\n\nChannel Selects can be configured for both single-select and multi-select behavior. When a user finishes making their choice(s) your app receives an interaction.\n\nChannel Selects must be placed inside an Action Row and are only available in messages. An Action Row can contain only one select menu and cannot contain buttons if it has a select menu.",
+      "properties": {
+        "channel_types": {
+          "description": "List of channel types to include in the ChannelSelect component",
+          "items": {
+            "$ref": "#/definitions/ChannelType"
+          },
+          "type": "array"
+        },
+        "custom_id": {
+          "description": "A developer-defined identifier for the select menu, max 100 characters",
+          "type": "string"
+        },
+        "default_values": {
+          "description": "List of default values for auto-populated select menu components",
+          "items": {
+            "$ref": "#/definitions/APISelectMenuDefaultValue%3Cenum-1563248724-43343-43367-1563248724-43170-43407-1563248724-0-68149%3E"
+          },
+          "type": "array"
+        },
+        "disabled": {
+          "description": "Disable the select",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "max_values": {
+          "description": "The maximum number of items that can be chosen; max 25",
+          "type": "number"
+        },
+        "min_values": {
+          "description": "The minimum number of items that must be chosen; min 0, max 25",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "Custom placeholder text if nothing is selected, max 150 characters",
+          "type": "string"
+        },
+        "required": {
+          "description": "Whether the component is required to answer in a modal.",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 8,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIComponentInContainer": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIActionRowComponent%3CAPIComponentInMessageActionRow%3E"
+        },
+        {
+          "$ref": "#/definitions/APIFileComponent"
+        },
+        {
+          "$ref": "#/definitions/APIMediaGalleryComponent"
+        },
+        {
+          "$ref": "#/definitions/APISectionComponent"
+        },
+        {
+          "$ref": "#/definitions/APISeparatorComponent"
+        },
+        {
+          "$ref": "#/definitions/APITextDisplayComponent"
+        }
+      ]
+    },
+    "APIComponentInMessageActionRow": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIButtonComponent"
+        },
+        {
+          "$ref": "#/definitions/APISelectMenuComponent"
+        }
+      ]
+    },
+    "APIContainerComponent": {
+      "additionalProperties": false,
+      "description": "A Container is a top-level layout component that holds up to 10 components. Containers are visually distinct from surrounding components and has an optional customizable color bar.\n\nContainers are only available in messages.",
+      "properties": {
+        "accent_color": {
+          "description": "Color for the accent on the container as RGB from `0x000000` to `0xFFFFFF`",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "components": {
+          "description": "Up to 10 components of the type action row, text display, section, media gallery, separator, or file",
+          "items": {
+            "$ref": "#/definitions/APIComponentInContainer"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "spoiler": {
+          "description": "Whether the container should be a spoiler (or blurred out)",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 17,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "components",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIEmbed": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "$ref": "#/definitions/APIEmbedAuthor",
+          "description": "Author information"
+        },
+        "color": {
+          "description": "Color code of the embed",
+          "type": "number"
+        },
+        "description": {
+          "description": "Description of embed\n\nLength limit: 4096 characters",
+          "type": "string"
+        },
+        "fields": {
+          "description": "Fields information\n\nLength limit: 25 field objects",
+          "items": {
+            "$ref": "#/definitions/APIEmbedField"
+          },
+          "type": "array"
+        },
+        "flags": {
+          "$ref": "#/definitions/EmbedFlags",
+          "description": "Embed flags combined as a bitfield"
+        },
+        "footer": {
+          "$ref": "#/definitions/APIEmbedFooter",
+          "description": "Footer information"
+        },
+        "image": {
+          "$ref": "#/definitions/APIEmbedImage",
+          "description": "Image information"
+        },
+        "provider": {
+          "$ref": "#/definitions/APIEmbedProvider",
+          "description": "Provider information"
+        },
+        "thumbnail": {
+          "$ref": "#/definitions/APIEmbedImage",
+          "description": "Thumbnail information"
+        },
+        "timestamp": {
+          "description": "Timestamp of embed content",
+          "type": "string"
+        },
+        "title": {
+          "description": "Title of embed\n\nLength limit: 256 characters",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/EmbedType",
+          "description": "Type of embed (always \"rich\" for webhook embeds)"
+        },
+        "url": {
+          "description": "URL of embed",
+          "type": "string"
+        },
+        "video": {
+          "$ref": "#/definitions/APIEmbedVideo",
+          "description": "Video information"
+        }
+      },
+      "type": "object"
+    },
+    "APIEmbedAuthor": {
+      "additionalProperties": false,
+      "properties": {
+        "icon_url": {
+          "description": "URL of author icon (only supports http(s) and attachments)",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of author\n\nLength limit: 256 characters",
+          "type": "string"
+        },
+        "proxy_icon_url": {
+          "description": "A proxied url of author icon",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL of author",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "APIEmbedField": {
+      "additionalProperties": false,
+      "properties": {
+        "inline": {
+          "description": "Whether or not this field should display inline",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Name of the field\n\nLength limit: 256 characters",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of the field\n\nLength limit: 1024 characters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "type": "object"
+    },
+    "APIEmbedFooter": {
+      "additionalProperties": false,
+      "properties": {
+        "icon_url": {
+          "description": "URL of footer icon (only supports http(s) and attachments)",
+          "type": "string"
+        },
+        "proxy_icon_url": {
+          "description": "A proxied url of footer icon",
+          "type": "string"
+        },
+        "text": {
+          "description": "Footer text\n\nLength limit: 2048 characters",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "type": "object"
+    },
+    "APIEmbedImage": {
+      "additionalProperties": false,
+      "properties": {
+        "content_type": {
+          "description": "The image's media type",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description (alt text) for the image",
+          "type": "string"
+        },
+        "flags": {
+          "$ref": "#/definitions/EmbedMediaFlags",
+          "description": "Embed media flags combined as a bitfield"
+        },
+        "height": {
+          "description": "Height of image",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "ThumbHash placeholder of the image",
+          "type": "string"
+        },
+        "placeholder_version": {
+          "description": "Version of the placeholder",
+          "type": "number"
+        },
+        "proxy_url": {
+          "description": "A proxied url of the image",
+          "type": "string"
+        },
+        "url": {
+          "description": "Source url of image (only supports http(s) and attachments)",
+          "type": "string"
+        },
+        "width": {
+          "description": "Width of image",
+          "type": "number"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "type": "object"
+    },
+    "APIEmbedProvider": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Name of provider",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL of provider",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "APIEmbedVideo": {
+      "additionalProperties": false,
+      "properties": {
+        "content_type": {
+          "description": "The video's media type",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description (alt text) for the video",
+          "type": "string"
+        },
+        "flags": {
+          "$ref": "#/definitions/EmbedMediaFlags",
+          "description": "Embed media flags combined as a bitfield"
+        },
+        "height": {
+          "description": "Height of video",
+          "type": "number"
+        },
+        "placeholder": {
+          "description": "ThumbHash placeholder of the video",
+          "type": "string"
+        },
+        "placeholder_version": {
+          "description": "Version of the placeholder",
+          "type": "number"
+        },
+        "proxy_url": {
+          "description": "A proxied url of the video",
+          "type": "string"
+        },
+        "url": {
+          "description": "Source url of video",
+          "type": "string"
+        },
+        "width": {
+          "description": "Width of video",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "APIFileComponent": {
+      "additionalProperties": false,
+      "description": "A File is a top-level component that allows you to display an uploaded file as an attachment to the message and reference it in the component.\n\nEach file component can only display 1 attached file, but you can upload multiple files and add them to different file components within your payload.\n\nFiles are only available in messages.",
+      "properties": {
+        "file": {
+          "$ref": "#/definitions/APIUnfurledMediaItem",
+          "description": "This unfurled media item is unique in that it **only** support attachment references using the `attachment://<filename>` syntax"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "name": {
+          "description": "The name of the file. This field is ignored and provided by the API as part of the response",
+          "type": "string"
+        },
+        "size": {
+          "description": "The size of the file in bytes. This field is ignored and provided by the API as part of the response",
+          "type": "number"
+        },
+        "spoiler": {
+          "description": "Whether the media should be a spoiler (or blurred out)",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 13,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "file",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIMediaGalleryComponent": {
+      "additionalProperties": false,
+      "description": "A Media Gallery is a top-level content component that allows you to display 1-10 media attachments in an organized gallery format. Each item can have optional descriptions and can be marked as spoilers.\n\nMedia Galleries are only available in messages.",
+      "properties": {
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "items": {
+          "description": "1 to 10 media gallery items",
+          "items": {
+            "$ref": "#/definitions/APIMediaGalleryItem"
+          },
+          "type": "array"
+        },
+        "type": {
+          "const": 12,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "items",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIMediaGalleryItem": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "description": "Alt text for the media",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "media": {
+          "$ref": "#/definitions/APIUnfurledMediaItem",
+          "description": "A url or attachment"
+        },
+        "spoiler": {
+          "description": "Whether the media should be a spoiler (or blurred out)",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "media"
+      ],
+      "type": "object"
+    },
+    "APIMentionableSelectComponent": {
+      "$ref": "#/definitions/APIBaseAutoPopulatedSelectMenuComponent%3Cenum-1563248724-32567-32648-1563248724-31978-34083-1563248724-0-681491963567245%2C(enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149%7Cenum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149)%3E",
+      "description": "A Mentionable Select is an interactive component that allows users to select one or more mentionables in a message. Options are automatically populated based on available mentionables in the server.\n\nMentionable Selects can be configured for both single-select and multi-select behavior. When a user finishes making their choice(s), your app receives an interaction.\n\nMentionable Selects must be placed inside an Action Row and are only available in messages. An Action Row can contain only one select menu and cannot contain buttons if it has a select menu."
+    },
+    "APIMessageComponentEmoji": {
+      "additionalProperties": false,
+      "properties": {
+        "animated": {
+          "description": "Whether this emoji is animated",
+          "type": "boolean"
+        },
+        "id": {
+          "$ref": "#/definitions/Snowflake",
+          "description": "Emoji id"
+        },
+        "name": {
+          "description": "Emoji name",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "APIMessageTopLevelComponent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIActionRowComponent%3CAPIComponentInMessageActionRow%3E"
+        },
+        {
+          "$ref": "#/definitions/APIContainerComponent"
+        },
+        {
+          "$ref": "#/definitions/APIFileComponent"
+        },
+        {
+          "$ref": "#/definitions/APIMediaGalleryComponent"
+        },
+        {
+          "$ref": "#/definitions/APISectionComponent"
+        },
+        {
+          "$ref": "#/definitions/APISeparatorComponent"
+        },
+        {
+          "$ref": "#/definitions/APITextDisplayComponent"
+        }
+      ]
+    },
+    "APIPartialEmoji": {
+      "additionalProperties": false,
+      "description": "Not documented but mentioned",
+      "properties": {
+        "animated": {
+          "description": "Whether this emoji is animated",
+          "type": "boolean"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Snowflake"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Emoji id"
+        },
+        "name": {
+          "description": "Emoji name (can be null only in reaction emoji objects)",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "type": "object"
+    },
+    "APIPollMedia": {
+      "additionalProperties": false,
+      "properties": {
+        "emoji": {
+          "$ref": "#/definitions/APIPartialEmoji",
+          "description": "The emoji of the field"
+        },
+        "text": {
+          "description": "The text of the field\n\nThe maximum length is `300` for the question, and `55` for any answer",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "APIRoleSelectComponent": {
+      "$ref": "#/definitions/APIBaseAutoPopulatedSelectMenuComponent%3Cenum-1563248724-32502-32566-1563248724-31978-34083-1563248724-0-68149321891214%2Cenum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149%3E",
+      "description": "A Role Select is an interactive component that allows users to select one or more roles in a message. Options are automatically populated based on the server's available roles.\n\nRole Selects can be configured for both single-select and multi-select behavior. When a user finishes making their choice(s) your app receives an interaction.\n\nRole Selects must be placed inside an Action Row and are only available in messages. An Action Row can contain only one select menu and cannot contain buttons if it has a select menu."
+    },
+    "APISectionAccessoryComponent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIButtonComponent"
+        },
+        {
+          "$ref": "#/definitions/APIThumbnailComponent"
+        }
+      ]
+    },
+    "APISectionComponent": {
+      "additionalProperties": false,
+      "description": "A Section is a top-level layout component that allows you to join text contextually with an accessory.\n\nSections are only available in messages.",
+      "properties": {
+        "accessory": {
+          "$ref": "#/definitions/APISectionAccessoryComponent",
+          "description": "A thumbnail or a button component, with a future possibility of adding more compatible components"
+        },
+        "components": {
+          "description": "One to three text components",
+          "items": {
+            "$ref": "#/definitions/APITextDisplayComponent"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "type": {
+          "const": 9,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "accessory",
+        "components",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APISelectMenuComponent": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/APIChannelSelectComponent"
+        },
+        {
+          "$ref": "#/definitions/APIMentionableSelectComponent"
+        },
+        {
+          "$ref": "#/definitions/APIRoleSelectComponent"
+        },
+        {
+          "$ref": "#/definitions/APIStringSelectComponent"
+        },
+        {
+          "$ref": "#/definitions/APIUserSelectComponent"
+        }
+      ]
+    },
+    "APISelectMenuDefaultValue<(enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149|enum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149)>": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/Snowflake"
+        },
+        "type": {
+          "enum": [
+            "role",
+            "user"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "APISelectMenuDefaultValue<enum-1563248724-43343-43367-1563248724-43170-43407-1563248724-0-68149>": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/Snowflake"
+        },
+        "type": {
+          "const": "channel",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "APISelectMenuDefaultValue<enum-1563248724-43368-43386-1563248724-43170-43407-1563248724-0-68149>": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/Snowflake"
+        },
+        "type": {
+          "const": "role",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "APISelectMenuDefaultValue<enum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149>": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/Snowflake"
+        },
+        "type": {
+          "const": "user",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "type": "object"
+    },
+    "APISelectMenuOption": {
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "description": "Whether this option should be already-selected by default",
+          "type": "boolean"
+        },
+        "description": {
+          "description": "An additional description of the option (max 100 chars)",
+          "type": "string"
+        },
+        "emoji": {
+          "$ref": "#/definitions/APIMessageComponentEmoji",
+          "description": "The emoji to display to the left of the option"
+        },
+        "label": {
+          "description": "The user-facing name of the option (max 100 chars)",
+          "type": "string"
+        },
+        "value": {
+          "description": "The dev-defined value of the option (max 100 chars)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ],
+      "type": "object"
+    },
+    "APISeparatorComponent": {
+      "additionalProperties": false,
+      "description": "A Separator is a top-level layout component that adds vertical padding and visual division between other components.\n\nSeparators are only available in messages.",
+      "properties": {
+        "divider": {
+          "description": "Whether a visual divider should be displayed in the component",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "spacing": {
+          "$ref": "#/definitions/SeparatorSpacingSize",
+          "description": "Size of separator padding"
+        },
+        "type": {
+          "const": 14,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIStringSelectComponent": {
+      "additionalProperties": false,
+      "description": "A String Select is an interactive component that allows users to select one or more provided options in a message.\n\nString Selects can be configured for both single-select and multi-select behavior. When a user finishes making their choice(s) your app receives an interaction.\n\nAn Action Row can contain only one select menu and cannot contain buttons if it has a select menu.",
+      "properties": {
+        "custom_id": {
+          "description": "A developer-defined identifier for the select menu, max 100 characters",
+          "type": "string"
+        },
+        "disabled": {
+          "description": "Disable the select",
+          "type": "boolean"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "max_values": {
+          "description": "The maximum number of items that can be chosen; max 25",
+          "type": "number"
+        },
+        "min_values": {
+          "description": "The minimum number of items that must be chosen; min 0, max 25",
+          "type": "number"
+        },
+        "options": {
+          "description": "Specified choices in a select menu; max 25",
+          "items": {
+            "$ref": "#/definitions/APISelectMenuOption"
+          },
+          "type": "array"
+        },
+        "placeholder": {
+          "description": "Custom placeholder text if nothing is selected, max 150 characters",
+          "type": "string"
+        },
+        "required": {
+          "description": "Whether the component is required to answer in a modal.",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 3,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "custom_id",
+        "options",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APITextDisplayComponent": {
+      "additionalProperties": false,
+      "description": "A Text Display is a top-level content component that allows you to add text to your message formatted with markdown and mention users and roles. This is similar to the content field of a message, but allows you to add multiple text components, controlling the layout of your message.\n\nText Displays are only available in messages.",
+      "properties": {
+        "content": {
+          "description": "Text that will be displayed similar to a message",
+          "type": "string"
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "type": {
+          "const": 10,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "content",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIThumbnailComponent": {
+      "additionalProperties": false,
+      "description": "A Thumbnail is a content component that is a small image only usable as an accessory in a section. The preview comes from an url or attachment through the unfurled media item structure.\n\nThumbnails are only available in messages as an accessory in a section.",
+      "properties": {
+        "description": {
+          "description": "Alt text for the media",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "32 bit integer used as an optional identifier for component\n\nThe id field is optional and is used to identify components in the response from an interaction that aren't interactive components. The id must be unique within the message and is generated sequentially if left empty. Generation of ids won't use another id that exists in the message if you have one defined for another component.",
+          "type": "number"
+        },
+        "media": {
+          "$ref": "#/definitions/APIUnfurledMediaItem",
+          "description": "A url or attachment"
+        },
+        "spoiler": {
+          "description": "Whether the thumbnail should be a spoiler (or blurred out)",
+          "type": "boolean"
+        },
+        "type": {
+          "const": 11,
+          "description": "The type of the component",
+          "type": "number"
+        }
+      },
+      "required": [
+        "media",
+        "type"
+      ],
+      "type": "object"
+    },
+    "APIUnfurledMediaItem": {
+      "additionalProperties": false,
+      "properties": {
+        "attachment_id": {
+          "$ref": "#/definitions/Snowflake",
+          "description": "The id of the uploaded attachment."
+        },
+        "content_type": {
+          "description": "The media type of the content",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "flags": {
+          "$ref": "#/definitions/UnfurledMediaItemFlags",
+          "description": "Unfurled media item flags combined as a bitfield"
+        },
+        "height": {
+          "description": "The height of the media item (if image or video)",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "loading_state": {
+          "$ref": "#/definitions/UnfurledMediaItemLoadingState"
+        },
+        "placeholder": {
+          "description": "ThumbHash placeholder (if image or video)",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "placeholder_version": {
+          "description": "Version of the placeholder (if image or video)",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "proxy_url": {
+          "description": "The proxied url of the media item",
+          "type": "string"
+        },
+        "url": {
+          "description": "Supports arbitrary urls and `attachment://<filename>` references",
+          "type": "string"
+        },
+        "width": {
+          "description": "The width of the media item (if image or video)",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "type": "object"
+    },
+    "APIUserSelectComponent": {
+      "$ref": "#/definitions/APIBaseAutoPopulatedSelectMenuComponent%3Cenum-1563248724-32437-32501-1563248724-31978-34083-1563248724-0-68149321778361%2Cenum-1563248724-43387-43405-1563248724-43170-43407-1563248724-0-68149%3E",
+      "description": "A User Select is an interactive component that allows users to select one or more users in a message. Options are automatically populated based on the server's available users.\n\nUser Selects can be configured for both single-select and multi-select behavior. When a user finishes making their choice(s) your app receives an interaction.\n\nUser Selects must be placed inside an Action Row and are only available in messages. An Action Row can contain only one select menu and cannot contain buttons if it has a select menu."
+    },
+    "AllowedMentionsTypes": {
+      "enum": [
+        "everyone",
+        "roles",
+        "users"
+      ],
+      "type": "string"
+    },
+    "ChannelType": {
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "type": "number"
+    },
+    "DiscordWebhookBody": {
+      "$ref": "#/definitions/RESTPostAPIWebhookWithTokenJSONBody"
+    },
+    "EmbedFlags": {
+      "const": 32,
+      "type": "number"
+    },
+    "EmbedMediaFlags": {
+      "const": 32,
+      "type": "number"
+    },
+    "EmbedType": {
+      "enum": [
+        "rich",
+        "image",
+        "video",
+        "gifv",
+        "article",
+        "link",
+        "auto_moderation_message",
+        "poll_result"
+      ],
+      "type": "string"
+    },
+    "MessageFlags": {
+      "enum": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32,
+        64,
+        128,
+        256,
+        1024,
+        4096,
+        8192,
+        16384,
+        32768
+      ],
+      "type": "number"
+    },
+    "PollLayoutType": {
+      "const": 1,
+      "type": "number"
+    },
+    "RESTAPIAttachment": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "description": "Description (alt text) for the file (max 1024 characters)",
+          "type": "string"
+        },
+        "duration_secs": {
+          "description": "The duration of the audio file (currently for voice messages)",
+          "type": "number"
+        },
+        "filename": {
+          "description": "Name of file attached",
+          "type": "string"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Snowflake"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "description": "Attachment id or a number that matches `n` in `files[n]`"
+        },
+        "title": {
+          "description": "The original filename of the upload with special characters preserved\n\nThis will be present when the filename contains special characters (e.g. Cyrillic), in which case the `filename` field will be a sanitized version without those characters",
+          "type": "string"
+        },
+        "waveform": {
+          "description": "Base64 encoded bytearray representing a sampled waveform (currently for voice messages)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "RESTAPIPoll": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_multiselect": {
+          "description": "Whether a user can select multiple answers",
+          "type": "boolean"
+        },
+        "answers": {
+          "description": "Each of the answers available in the poll, up to 10",
+          "items": {
+            "$ref": "#/definitions/APIBasePollAnswer"
+          },
+          "type": "array"
+        },
+        "duration": {
+          "description": "Number of hours the poll should be open for, up to 32 days",
+          "type": "number"
+        },
+        "layout_type": {
+          "$ref": "#/definitions/PollLayoutType",
+          "description": "The layout type of the poll"
+        },
+        "question": {
+          "$ref": "#/definitions/APIPollMedia",
+          "description": "The question of the poll"
+        }
+      },
+      "required": [
+        "answers",
+        "question"
+      ],
+      "type": "object"
+    },
+    "RESTPostAPIWebhookWithTokenJSONBody": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_mentions": {
+          "$ref": "#/definitions/APIAllowedMentions",
+          "description": "Allowed mentions for the message"
+        },
+        "applied_tags": {
+          "description": "Array of tag ids to apply to the thread",
+          "items": {
+            "$ref": "#/definitions/Snowflake"
+          },
+          "type": "array"
+        },
+        "attachments": {
+          "description": "Attachment objects with filename and description",
+          "items": {
+            "$ref": "#/definitions/RESTAPIAttachment"
+          },
+          "type": "array"
+        },
+        "avatar_url": {
+          "description": "Override the default avatar of the webhook",
+          "type": "string"
+        },
+        "components": {
+          "description": "The components to include with the message\n\nApplication-owned webhooks can always send components. Non-application-owned webhooks cannot send interactive components, and the `components` field will be ignored unless they set the `with_components` query param.",
+          "items": {
+            "$ref": "#/definitions/APIMessageTopLevelComponent"
+          },
+          "type": "array"
+        },
+        "content": {
+          "description": "The message contents (up to 2000 characters)",
+          "type": "string"
+        },
+        "embeds": {
+          "description": "Embedded `rich` content",
+          "items": {
+            "$ref": "#/definitions/APIEmbed"
+          },
+          "type": "array"
+        },
+        "flags": {
+          "$ref": "#/definitions/MessageFlags",
+          "description": "Message flags combined as a bitfield"
+        },
+        "poll": {
+          "$ref": "#/definitions/RESTAPIPoll",
+          "description": "A poll!"
+        },
+        "thread_name": {
+          "description": "Name of thread to create\n\nAvailable only if the webhook is in a forum channel and a thread is not specified in  {@link  RESTPostAPIWebhookWithTokenQuery.thread_id }  query parameter",
+          "type": "string"
+        },
+        "tts": {
+          "description": "`true` if this is a TTS message",
+          "type": "boolean"
+        },
+        "username": {
+          "description": "Override the default username of the webhook",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SeparatorSpacingSize": {
+      "enum": [
+        1,
+        2
+      ],
+      "type": "number"
+    },
+    "Snowflake": {
+      "type": "string"
+    },
+    "UnfurledMediaItemFlags": {
+      "const": 1,
+      "type": "number"
+    },
+    "UnfurledMediaItemLoadingState": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "type": "number"
+    }
+  }
+}
