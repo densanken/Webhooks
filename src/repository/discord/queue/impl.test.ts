@@ -109,6 +109,37 @@ Deno.test({
 
 Deno.test({
   name:
+    "DiscordQueueRepository の scanPendingDiscordWebhookMessages は limit が 0 以下の場合に空配列を返す",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      await withMemoryKv(async (kv) => {
+        const repository = new DiscordQueueRepository(kv);
+
+        await repository.enqueueDiscordWebhookMessage({
+          id: "message-1",
+          sourceType: "dynamic",
+          sourceId: "token-1",
+          discordWebhookUrl: discordWebhookUrl(),
+          body: { content: "hello" },
+          now: new Date("2026-06-06T00:00:00.000Z"),
+        });
+
+        assertEquals(
+          await repository.scanPendingDiscordWebhookMessages({ limit: 0 }),
+          [],
+        );
+        assertEquals(
+          await repository.scanPendingDiscordWebhookMessages({ limit: -1 }),
+          [],
+        );
+      });
+    });
+  },
+});
+
+Deno.test({
+  name:
     "DiscordQueueRepository はカーソルページで保留中メッセージをスキャンする",
   permissions: ENV_PERMISSION,
   fn: async () => {
@@ -534,6 +565,42 @@ Deno.test({
         assertEquals(failed, null);
         assertEquals(await repository.getDiscordWebhookMessage(id), sent);
         assertEquals(await repository.listDeadDiscordWebhookMessages(), []);
+      });
+    });
+  },
+});
+
+Deno.test({
+  name:
+    "DiscordQueueRepository の listDeadDiscordWebhookMessages は limit が 0 以下の場合に空配列を返す",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      await withMemoryKv(async (kv) => {
+        const repository = new DiscordQueueRepository(kv);
+        const id = "message-1";
+
+        await repository.enqueueDiscordWebhookMessage({
+          id,
+          sourceType: "dynamic",
+          sourceId: "token-1",
+          discordWebhookUrl: discordWebhookUrl(),
+          body: { content: "hello" },
+          now: new Date("2026-06-06T00:00:00.000Z"),
+        });
+        await repository.moveDiscordWebhookMessageToDeadLetter(id, {
+          lastError: { reason: "not_found", upstreamStatus: 404 },
+          now: new Date("2026-06-06T00:00:01.000Z"),
+        });
+
+        assertEquals(
+          await repository.listDeadDiscordWebhookMessages({ limit: 0 }),
+          [],
+        );
+        assertEquals(
+          await repository.listDeadDiscordWebhookMessages({ limit: -1 }),
+          [],
+        );
       });
     });
   },

@@ -243,6 +243,7 @@ export class DiscordQueueRepository implements DiscordQueueRepositoryInterface {
   async listDeadDiscordWebhookMessages(
     options: ScanDiscordWebhookQueueOptions = {},
   ): Promise<QueuedDiscordMessageRecord[]> {
+    if (options.limit !== undefined && options.limit <= 0) return [];
     const records: QueuedDiscordMessageRecord[] = [];
     const entries = this.kv.list<DeadQueueIndex>(
       { prefix: deadQueueIndexPrefix },
