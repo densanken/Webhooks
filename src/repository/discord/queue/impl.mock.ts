@@ -52,8 +52,9 @@ export class MockDiscordQueueRepository
   getDiscordWebhookMessage(
     id: string,
   ): Promise<QueuedDiscordMessageRecord | null> {
+    const found = this.records.find((record) => record.id === id);
     return Promise.resolve(
-      this.records.find((record) => record.id === id) ?? null,
+      found === undefined ? null : createQueuedDiscordMessageRecord(found),
     );
   }
 
@@ -62,13 +63,16 @@ export class MockDiscordQueueRepository
   ): Promise<QueuedDiscordMessageRecord[]> {
     const now = options.now ?? new Date();
     const records = this.records
-      .filter((record) =>
-        record.status === "pending" ||
-        this.isExpiredProcessingMessage(record, now)
+      .filter(
+        (record) =>
+          record.status === "pending" ||
+          this.isExpiredProcessingMessage(record, now),
       )
       .sort((left, right) => this.compareQueueOrder(left, right));
 
-    return Promise.resolve(records.slice(0, options.limit));
+    return Promise.resolve(
+      records.slice(0, options.limit).map(createQueuedDiscordMessageRecord),
+    );
   }
 
   scanPendingDiscordWebhookMessagePage(
@@ -80,14 +84,15 @@ export class MockDiscordQueueRepository
 
     const now = options.now ?? new Date();
     const indexedRecords = this.records
-      .filter((record) =>
-        record.status === "pending" || record.status === "processing"
+      .filter(
+        (record) =>
+          record.status === "pending" || record.status === "processing",
       )
       .sort((left, right) => this.compareQueueOrder(left, right));
     const startIndex = options.cursor === undefined
       ? 0
-      : indexedRecords.findIndex((record) =>
-        this.toQueueCursor(record) > options.cursor!
+      : indexedRecords.findIndex(
+        (record) => this.toQueueCursor(record) > options.cursor!,
       );
     if (startIndex < 0) {
       return Promise.resolve({ messages: [], scannedCount: 0 });
@@ -97,9 +102,10 @@ export class MockDiscordQueueRepository
       startIndex,
       startIndex + options.limit,
     );
-    const messages = scannedRecords.filter((record) =>
-      record.status === "pending" ||
-      this.isExpiredProcessingMessage(record, now)
+    const messages = scannedRecords.filter(
+      (record) =>
+        record.status === "pending" ||
+        this.isExpiredProcessingMessage(record, now),
     );
     const lastRecord = scannedRecords.at(-1);
 
@@ -186,7 +192,9 @@ export class MockDiscordQueueRepository
       .filter((record) => record.status === "dead")
       .sort((left, right) => left.updatedAt.localeCompare(right.updatedAt));
 
-    return Promise.resolve(records.slice(0, options.limit));
+    return Promise.resolve(
+      records.slice(0, options.limit).map(createQueuedDiscordMessageRecord),
+    );
   }
 
   private async updateTerminalStatus(
@@ -235,8 +243,10 @@ export class MockDiscordQueueRepository
     message: QueuedDiscordMessageRecord,
     now: Date,
   ): boolean {
-    return message.status === "processing" &&
-      (message.processingUntilEpochMs ?? 0) <= now.getTime();
+    return (
+      message.status === "processing" &&
+      (message.processingUntilEpochMs ?? 0) <= now.getTime()
+    );
   }
 
   private compareQueueOrder(
