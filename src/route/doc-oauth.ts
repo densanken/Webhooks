@@ -229,9 +229,21 @@ export const createDocOAuthRoute = (config: DocOAuthConfig) => {
         return c.json(errorWithLogoutUrl("Authentication failed"), 502);
       }
 
-      const guildsResponse = await fetchFn(DISCORD_GUILDS_URL, {
-        headers: { Authorization: `Bearer ${token.token}` },
-      });
+      let guildsResponse: Response;
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 10_000);
+        try {
+          guildsResponse = await fetchFn(DISCORD_GUILDS_URL, {
+            headers: { Authorization: `Bearer ${token.token}` },
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timer);
+        }
+      } catch {
+        return c.json(errorWithLogoutUrl("Failed to fetch guilds"), 502);
+      }
 
       if (!guildsResponse.ok) {
         return c.json(errorWithLogoutUrl("Failed to fetch guilds"), 502);
