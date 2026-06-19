@@ -84,6 +84,7 @@ export class DiscordWebhookSender implements DiscordSenderPort {
   ): Promise<Record<string, unknown>> {
     const contentType = response.headers.get("content-type") ?? "";
     if (!contentType.toLowerCase().includes("application/json")) {
+      await response.body?.cancel();
       return {};
     }
 

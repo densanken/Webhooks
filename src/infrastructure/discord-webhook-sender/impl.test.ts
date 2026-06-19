@@ -1,11 +1,11 @@
-import { assertEquals } from "@std/assert";
+import { assertEquals, assertInstanceOf } from "@std/assert";
 
 import {
   DiscordWebhookSender,
   type DiscordWebhookSenderOptions,
 } from "./impl.ts";
 
-Deno.test("DiscordWebhookSender は Discord Webhook URL に JSON ペイロードを送信する", async () => {
+Deno.test("DiscordWebhookSender sends JSON payloads to Discord webhook URLs", async () => {
   type Fetcher = NonNullable<DiscordWebhookSenderOptions["fetcher"]>;
   const calls: Array<{
     input: Parameters<Fetcher>[0];
@@ -24,16 +24,17 @@ Deno.test("DiscordWebhookSender は Discord Webhook URL に JSON ペイロード
   });
 
   assertEquals(result, { ok: true, status: 204 });
-  assertEquals(calls, [{
-    input: "https://discord.com/api/webhooks/123/token",
-    init: {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ content: "hello" }),
+  assertEquals(calls.length, 1);
+  const { signal, ...initWithoutSignal } = calls[0].init ?? {};
+  assertInstanceOf(signal, AbortSignal);
+  assertEquals(calls[0].input, "https://discord.com/api/webhooks/123/token");
+  assertEquals(initWithoutSignal, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
     },
-  }]);
+    body: JSON.stringify({ content: "hello" }),
+  });
 });
 
 Deno.test("DiscordWebhookSender は Discord のレート制限レスポンスを変換する", async () => {
