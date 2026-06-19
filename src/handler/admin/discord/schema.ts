@@ -1,6 +1,6 @@
 import { z } from "@hono/zod-openapi";
 
-import { parseDiscordWebhookUrl } from "../util/discord/webhook-url.ts";
+import { parseDiscordWebhookUrl } from "../../../util/discord/webhook-url.ts";
 
 const DescriptionSchema = z.string().max(200).openapi({
   description: "リソースの説明",

@@ -8,7 +8,7 @@ import {
   createSessionValue,
   SESSION_COOKIE,
   SESSION_MAX_AGE_SECONDS,
-} from "../middleware/doc.ts";
+} from "../../middleware/doc.ts";
 
 const STATE_COOKIE = "doc_oauth_state";
 const PROVIDER_STATE_COOKIE = "state";

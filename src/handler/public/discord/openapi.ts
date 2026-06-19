@@ -1,7 +1,7 @@
 // 公開 Webhook エンドポイントの OpenAPI ドキュメント
 //
-// 公開ルート (`webhook.ts`) は Ajv でリクエストボディを検証する (zod ではない) ため、
-// OpenAPI 定義は 3.1 フラグメントとしてここに保持し `api.ts` の管理ドキュメントに統合する
+// 公開ルート (`route.ts`) は Ajv でリクエストボディを検証する (zod ではない) ため、
+// OpenAPI 定義は 3.1 フラグメントとしてここに保持し `handler/admin.ts` の管理ドキュメントに統合する
 // ここではエンドポイントの説明だけを持ち、リクエスト検証は行わない
 
 export const PUBLIC_DISCORD_WEBHOOK_TAG = "Public Discord Webhooks";

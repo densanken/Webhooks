@@ -1,13 +1,13 @@
 import { assertEquals } from "@std/assert";
 import { Hono } from "hono";
 
-import { MockDiscordRegisteredWebhookRepository } from "../repository/discord/registered-webhook/impl.mock.ts";
-import { MockWebhookTokenRepository } from "../repository/token/impl.mock.ts";
-import { discordWebhookUrl } from "../test-helper/webhook.ts";
-import { DiscordRegisteredWebhookUseCase } from "../usecase/discord/registered-webhook/impl.ts";
-import { WebhookTokenUseCase } from "../usecase/token/impl.ts";
-import { createDiscordWebhookAdminRoute } from "./discord-webhook-admin.ts";
-import { createTokenAdminRoute } from "./token-admin.ts";
+import { MockDiscordRegisteredWebhookRepository } from "../../repository/discord/registered-webhook/impl.mock.ts";
+import { MockWebhookTokenRepository } from "../../repository/token/impl.mock.ts";
+import { discordWebhookUrl } from "../../test-helper/webhook.ts";
+import { DiscordRegisteredWebhookUseCase } from "../../usecase/discord/registered-webhook/impl.ts";
+import { WebhookTokenUseCase } from "../../usecase/token/impl.ts";
+import { createDiscordWebhookAdminRoute } from "./discord/route.ts";
+import { createTokenAdminRoute } from "./token/route.ts";
 
 const API_KEY = "test-api-key";
 const REGISTERED_UUID = "11111111-1111-1111-8111-111111111111";

@@ -1,16 +1,14 @@
 import { Scalar } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 
-import { Kv } from "../infrastructure/kv/client.ts";
-import { createDocAuthMiddleware } from "../middleware/doc.ts";
-import { DiscordRegisteredWebhookRepository } from "../repository/discord/registered-webhook/impl.ts";
-import { WebhookTokenRepository } from "../repository/token/impl.ts";
-import { DiscordRegisteredWebhookUseCase } from "../usecase/discord/registered-webhook/impl.ts";
-import { WebhookTokenUseCase } from "../usecase/token/impl.ts";
+import { Kv } from "../../infrastructure/kv/client.ts";
+import { createDocAuthMiddleware } from "../../middleware/doc.ts";
+import { composeDiscordAdminUseCase } from "../../composition/discord-admin.ts";
+import { composeTokenAdminUseCase } from "../../composition/token-admin.ts";
 import {
   createDiscordWebhookAdminRoute,
   REGISTERED_DISCORD_WEBHOOK_TAG,
-} from "./discord-webhook-admin.ts";
+} from "./discord/route.ts";
 import {
   createDocOAuthRoute,
   type DocOAuthConfig,
@@ -19,11 +17,11 @@ import {
 import {
   createTokenAdminRoute,
   DYNAMIC_WEBHOOK_TOKEN_TAG,
-} from "./token-admin.ts";
+} from "./token/route.ts";
 import {
   PUBLIC_DISCORD_WEBHOOK_TAG,
   publicWebhookOpenApiPaths,
-} from "./discord-webhook.openapi.ts";
+} from "../public/discord/openapi.ts";
 
 const OPENAPI_DOCUMENT_PATH = "/doc";
 const OPENAPI_UI_PATH = "/doc/ui";
@@ -41,19 +39,14 @@ export const createApiRoute = async (
   const kv = options.kv ?? await Kv.getKv();
   const discordWebhookAdminRoute = createDiscordWebhookAdminRoute({
     apiKeys: options.apiKeys,
-    registeredDiscordWebhookUseCase: new DiscordRegisteredWebhookUseCase(
-      new DiscordRegisteredWebhookRepository(kv),
-      {
-        publicBaseUrl: options.publicBaseUrl ??
-          Deno.env.get("PUBLIC_BASE_URL"),
-      },
-    ),
+    registeredDiscordWebhookUseCase: composeDiscordAdminUseCase({
+      kv,
+      publicBaseUrl: options.publicBaseUrl,
+    }),
   });
   const tokenAdminRoute = createTokenAdminRoute({
     apiKeys: options.apiKeys,
-    webhookTokenUseCase: new WebhookTokenUseCase(
-      new WebhookTokenRepository(kv),
-    ),
+    webhookTokenUseCase: composeTokenAdminUseCase({ kv }),
   });
 
   // 2 つの管理ルートの OpenAPI ドキュメントを統合する

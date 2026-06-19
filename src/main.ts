@@ -1,12 +1,15 @@
 // Discord ディスパッチャーの Deno.cron ジョブをトップレベルで登録する
-import "./cron/discord-dispatcher.ts";
+import "./job/discord/dispatcher.ts";
 
 import { Hono } from "hono";
 
 import { Kv } from "./infrastructure/kv/client.ts";
 import { redactingLogger } from "./middleware/logger.ts";
-import { createApiRoute, type CreateApiRouteOptions } from "./route/api.ts";
-import { createDiscordWebhookRoute } from "./route/discord-webhook.ts";
+import {
+  createApiRoute,
+  type CreateApiRouteOptions,
+} from "./handler/admin/route.ts";
+import { createDiscordWebhookRoute } from "./handler/public/discord/route.ts";
 
 export const createApp = async (
   options: CreateApiRouteOptions = {},

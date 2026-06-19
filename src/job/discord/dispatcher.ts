@@ -1,10 +1,6 @@
-import { DiscordWebhookSender } from "../infrastructure/discord-webhook-sender/impl.ts";
-import { Kv } from "../infrastructure/kv/client.ts";
-import { DiscordRateLimitRepository } from "../repository/discord/rate-limit/impl.ts";
-import { DiscordQueueRepository } from "../repository/discord/queue/impl.ts";
-import { DiscordDispatchUseCase } from "../usecase/discord/dispatch/impl.ts";
-import type { DispatchPendingInput } from "../usecase/discord/dispatch/interface.ts";
-import { notifyDeadLetterMessages } from "./dead-letter-notifier.ts";
+import { composeDispatcherDependencies } from "../../composition/dispatcher.ts";
+import type { DispatchPendingInput } from "../../usecase/discord/dispatch/interface.ts";
+import { notifyDeadLetterMessages } from "./notifier.ts";
 
 export const DISCORD_DISPATCHER_CRON_NAME = "dispatch-discord-webhooks";
 export const DISCORD_DISPATCHER_CRON_SCHEDULE = "0 7,19 * * *";
@@ -54,16 +50,8 @@ export const resolveDispatchPendingInput = (
 
 export const dispatchDiscordWebhookMessages = async (): Promise<void> => {
   try {
-    const kv = await Kv.getKv();
-    const queueRepository = new DiscordQueueRepository(kv);
-    const rateLimitRepository = new DiscordRateLimitRepository(kv);
-    const sender = new DiscordWebhookSender();
-
-    const dispatcher = new DiscordDispatchUseCase({
-      queueRepository,
-      rateLimitRepository,
-      sender,
-    });
+    const { queueRepository, rateLimitRepository, sender, dispatcher } =
+      await composeDispatcherDependencies();
 
     const result = await dispatcher.dispatchPendingDiscordWebhookMessages(
       resolveDispatchPendingInput(),

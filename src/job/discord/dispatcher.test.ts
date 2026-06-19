@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 
-import { resolveDispatchPendingInput } from "./discord-dispatcher.ts";
+import { resolveDispatchPendingInput } from "./dispatcher.ts";
 
 const envReader = (env: Record<string, string>) => (name: string) => env[name];
 
