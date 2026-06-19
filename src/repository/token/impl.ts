@@ -78,7 +78,9 @@ export class WebhookTokenRepository implements WebhookTokenRepositoryInterface {
 
     const updatedRecord = createWebhookTokenRecord({
       ...entry.value,
-      description: input.description,
+      description: input.description === undefined
+        ? entry.value.description
+        : input.description,
       updatedAt: (input.now ?? new Date()).toISOString(),
     });
 

@@ -113,6 +113,14 @@ Deno.test({
         );
         assertEquals(updated?.description, "updated");
         assertEquals(updated?.updatedAt, "2026-06-06T00:00:02.000Z");
+
+        const partialUpdated = await repository.updateRegisteredDiscordWebhook(
+          "registered-1",
+          { now: new Date("2026-06-06T00:00:03.000Z") },
+        );
+        assertEquals(partialUpdated?.description, "updated");
+        assertEquals(partialUpdated?.updatedAt, "2026-06-06T00:00:03.000Z");
+
         assertEquals(
           await repository.updateRegisteredDiscordWebhook("missing", {}),
           null,

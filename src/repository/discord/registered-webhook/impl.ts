@@ -118,7 +118,9 @@ export class DiscordRegisteredWebhookRepository
 
     const updatedRecord = createRegisteredDiscordWebhookKvRecord({
       ...entry.value,
-      description: input.description,
+      description: input.description === undefined
+        ? entry.value.description
+        : input.description,
       updatedAt: (input.now ?? new Date()).toISOString(),
     });
 
