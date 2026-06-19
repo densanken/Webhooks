@@ -1,3 +1,4 @@
+import { InvalidDiscordWebhookUrlError } from "../../../util/discord/webhook-url.ts";
 import { parseDiscordWebhookJsonRequest } from "../../../util/discord/webhook-body.ts";
 import { verifyBearerTokenHash } from "../../../util/crypto.ts";
 import type { DiscordSendResult } from "../sender/interface.ts";
@@ -102,7 +103,7 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
         now: input.now,
       });
     } catch (error) {
-      if (error instanceof TypeError) {
+      if (error instanceof InvalidDiscordWebhookUrlError) {
         throw invalidDiscordWebhookUrlError(error.message);
       }
       throw error;

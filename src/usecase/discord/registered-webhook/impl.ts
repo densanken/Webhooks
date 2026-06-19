@@ -4,6 +4,7 @@ import type {
 } from "../../../repository/discord/registered-webhook/interface.ts";
 import { generateToken } from "../../../util/crypto.ts";
 import { WebhookRepositoryConflictError } from "../../../repository/error/impl.ts";
+import { InvalidDiscordWebhookUrlError } from "../../../util/discord/webhook-url.ts";
 import {
   invalidDiscordWebhookUrlError,
   notFoundError,
@@ -53,7 +54,7 @@ export class DiscordRegisteredWebhookUseCase
     try {
       record = await attemptCreate();
     } catch (error) {
-      if (error instanceof TypeError) {
+      if (error instanceof InvalidDiscordWebhookUrlError) {
         throw invalidDiscordWebhookUrlError(error.message);
       }
       if (!(error instanceof WebhookRepositoryConflictError)) {

@@ -5,6 +5,13 @@ const DISCORD_WEBHOOK_TOKEN_PATTERN = /^[A-Za-z0-9._-]{32,256}$/;
 const REDACTED_DISCORD_WEBHOOK_TOKEN = "<redacted>";
 const INVALID_DISCORD_WEBHOOK_URL = "<invalid-discord-webhook-url>";
 
+export class InvalidDiscordWebhookUrlError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "InvalidDiscordWebhookUrlError";
+  }
+}
+
 export type DiscordWebhookHost = "discord.com" | "discordapp.com";
 
 export type ParsedDiscordWebhookUrl = {
@@ -22,36 +29,48 @@ export const parseDiscordWebhookUrl = (
   try {
     parsedUrl = new URL(url);
   } catch {
-    throw new TypeError("Invalid Discord webhook URL");
+    throw new InvalidDiscordWebhookUrlError("Invalid Discord webhook URL");
   }
 
   if (parsedUrl.protocol !== "https:") {
-    throw new TypeError("Discord webhook URL must use https");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL must use https",
+    );
   }
 
   if (!DISCORD_WEBHOOK_HOSTS.has(parsedUrl.hostname)) {
-    throw new TypeError("Discord webhook URL host is not allowed");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL host is not allowed",
+    );
   }
 
   if (parsedUrl.port !== "") {
-    throw new TypeError("Discord webhook URL must not include a port");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL must not include a port",
+    );
   }
 
   if (parsedUrl.username !== "" || parsedUrl.password !== "") {
-    throw new TypeError("Discord webhook URL must not include credentials");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL must not include credentials",
+    );
   }
 
   if (parsedUrl.search !== "" || parsedUrl.href.includes("?")) {
-    throw new TypeError("Discord webhook URL must not include a query string");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL must not include a query string",
+    );
   }
 
   if (parsedUrl.hash !== "" || parsedUrl.href.includes("#")) {
-    throw new TypeError("Discord webhook URL must not include a fragment");
+    throw new InvalidDiscordWebhookUrlError(
+      "Discord webhook URL must not include a fragment",
+    );
   }
 
   const pathParts = parsedUrl.pathname.split("/");
   if (pathParts.length !== 5) {
-    throw new TypeError(
+    throw new InvalidDiscordWebhookUrlError(
       "Discord webhook URL path must be /api/webhooks/:id/:token",
     );
   }
@@ -63,7 +82,7 @@ export const parseDiscordWebhookUrl = (
     !DISCORD_SNOWFLAKE_PATTERN.test(webhookId) ||
     !DISCORD_WEBHOOK_TOKEN_PATTERN.test(webhookToken)
   ) {
-    throw new TypeError(
+    throw new InvalidDiscordWebhookUrlError(
       "Discord webhook URL path must be /api/webhooks/:id/:token",
     );
   }
