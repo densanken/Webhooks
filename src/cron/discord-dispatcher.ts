@@ -7,7 +7,7 @@ import type { DispatchPendingInput } from "../usecase/discord/dispatch/interface
 import { notifyDeadLetterMessages } from "./dead-letter-notifier.ts";
 
 export const DISCORD_DISPATCHER_CRON_NAME = "dispatch-discord-webhooks";
-export const DISCORD_DISPATCHER_CRON_SCHEDULE = "*/5 * * * *";
+export const DISCORD_DISPATCHER_CRON_SCHEDULE = "0 7,19 * * *";
 
 type EnvReader = (name: string) => string | undefined;
 
