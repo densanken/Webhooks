@@ -120,52 +120,45 @@ export class DiscordDispatchUseCase implements DiscordDispatchUseCaseInterface {
           continue;
         }
 
-        const claimedMessage = await this.queueRepository
-          .claimDiscordWebhookMessage(message.id, {
-            claimId,
-            now,
-            leaseMs: input.processingLeaseMs,
-          });
-        if (claimedMessage === null) {
-          await this.releaseRateLimitReservation(
-            message.discordWebhookUrlHash,
-            claimId,
-          );
-          result.skipped += 1;
-          continue;
-        }
-
-        sendCount += 1;
-
-        const sendResult = await this.sendSafely(
-          claimedMessage.discordWebhookUrl,
-          claimedMessage.body,
-        );
-        const completedAt = this.resolveNow(input.now);
-
-        if (sendResult.ok) {
-          const sent = await this.queueRepository.markDiscordWebhookMessageSent(
-            claimedMessage.id,
-            {
+        try {
+          const claimedMessage = await this.queueRepository
+            .claimDiscordWebhookMessage(message.id, {
               claimId,
-              now: completedAt,
-            },
-          );
-          await this.releaseRateLimitReservation(
-            claimedMessage.discordWebhookUrlHash,
-            claimId,
-          );
-          if (sent === null) {
+              now,
+              leaseMs: input.processingLeaseMs,
+            });
+          if (claimedMessage === null) {
             result.skipped += 1;
             continue;
           }
 
-          result.sent += 1;
-          continue;
-        }
+          sendCount += 1;
 
-        if (sendResult.reason === "rate_limited") {
-          try {
+          const sendResult = await this.sendSafely(
+            claimedMessage.discordWebhookUrl,
+            claimedMessage.body,
+          );
+          const completedAt = this.resolveNow(input.now);
+
+          if (sendResult.ok) {
+            const sent = await this.queueRepository
+              .markDiscordWebhookMessageSent(
+                claimedMessage.id,
+                {
+                  claimId,
+                  now: completedAt,
+                },
+              );
+            if (sent === null) {
+              result.skipped += 1;
+              continue;
+            }
+
+            result.sent += 1;
+            continue;
+          }
+
+          if (sendResult.reason === "rate_limited") {
             const retryAfterMs = toSafeRetryAfterMs(sendResult.retryAfterMs);
             const blockedUntilEpochMs = toBlockedUntilEpochMs(
               completedAt,
@@ -196,61 +189,53 @@ export class DiscordDispatchUseCase implements DiscordDispatchUseCaseInterface {
             result.rateLimited += 1;
             result.retried += 1;
             continue;
-          } finally {
-            await this.releaseRateLimitReservation(
-              claimedMessage.discordWebhookUrlHash,
-              claimId,
-            );
           }
-        }
 
-        const lastError = toQueuedDiscordMessageError(sendResult);
-        if (isTerminalFailure(sendResult)) {
-          const dead = await this.queueRepository
-            .moveDiscordWebhookMessageToDeadLetter(
-              claimedMessage.id,
-              {
-                claimId,
-                incrementAttempts: true,
-                lastError,
-                now: completedAt,
-              },
-            );
-          await this.releaseRateLimitReservation(
-            claimedMessage.discordWebhookUrlHash,
-            claimId,
-          );
-          if (dead === null) {
-            result.skipped += 1;
+          const lastError = toQueuedDiscordMessageError(sendResult);
+          if (isTerminalFailure(sendResult)) {
+            const dead = await this.queueRepository
+              .moveDiscordWebhookMessageToDeadLetter(
+                claimedMessage.id,
+                {
+                  claimId,
+                  incrementAttempts: true,
+                  lastError,
+                  now: completedAt,
+                },
+              );
+            if (dead === null) {
+              result.skipped += 1;
+              continue;
+            }
+
+            result.dead += 1;
+            result.deadMessages.push({
+              id: dead.id,
+              sourceType: dead.sourceType,
+              sourceId: dead.sourceId,
+              attempts: dead.attempts,
+              lastError: dead.lastError,
+              body: dead.body,
+            });
             continue;
           }
 
-          result.dead += 1;
-          result.deadMessages.push({
-            id: dead.id,
-            sourceType: dead.sourceType,
-            sourceId: dead.sourceId,
-            attempts: dead.attempts,
-            lastError: dead.lastError,
-            body: dead.body,
-          });
-          continue;
-        }
-
-        const retriedOrDead = await this.retryOrDeadLetter(
-          claimedMessage,
-          claimId,
-          lastError,
-          maxAttempts,
-          completedAt,
-          result,
-        );
-        await this.releaseRateLimitReservation(
-          claimedMessage.discordWebhookUrlHash,
-          claimId,
-        );
-        if (!retriedOrDead) {
-          result.skipped += 1;
+          const retriedOrDead = await this.retryOrDeadLetter(
+            claimedMessage,
+            claimId,
+            lastError,
+            maxAttempts,
+            completedAt,
+            result,
+          );
+          if (!retriedOrDead) {
+            result.skipped += 1;
+          }
+        } finally {
+          await this.releaseRateLimitReservation(
+            message.discordWebhookUrlHash,
+            claimId,
+          );
         }
       }
 
