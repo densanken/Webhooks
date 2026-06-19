@@ -1,0 +1,27 @@
+{
+  "tasks": {
+    "start": "deno run --env --unstable-kv --unstable-cron --allow-net --allow-env --allow-read --allow-write src/main.ts",
+    "dev": "deno run --watch --env --unstable-kv --unstable-cron --allow-net --allow-env --allow-read --allow-write src/main.ts",
+    "fmt": "deno lint --fix && deno fmt",
+    "lint": "deno check && deno lint && deno fmt --check",
+    "test": "deno test --unstable-kv --allow-env=WEBHOOK_SECRET_ENCRYPTION_KEY_ID,WEBHOOK_SECRET_ENCRYPTION_KEY",
+    "schema:discord": "deno run --allow-env --allow-read --allow-write --node-modules-dir=auto ts-json-schema-generator --path src/schema/discord-webhook-body.ts --type DiscordWebhookBody --out src/generated/discord-webhook-body.schema.json"
+  },
+  "fmt": {
+    "exclude": [
+      "src/generated"
+    ]
+  },
+  "minimumDependencyAge": "P3D",
+  "imports": {
+    "@hono/oauth-providers": "npm:@hono/oauth-providers@0.8.5",
+    "@hono/zod-openapi": "npm:@hono/zod-openapi@1.4.0",
+    "@scalar/hono-api-reference": "npm:@scalar/hono-api-reference@0.9.19",
+    "@std/assert": "jsr:@std/assert@1.0.19",
+    "@std/crypto": "jsr:@std/crypto@1.1.0",
+    "ajv": "npm:ajv@8.20.0",
+    "discord-api-types/v10": "npm:discord-api-types@0.38.48/v10",
+    "hono": "npm:hono@4.12.25",
+    "ts-json-schema-generator": "npm:ts-json-schema-generator@2.9.0"
+  }
+}
