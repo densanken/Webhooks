@@ -5,7 +5,10 @@ import { timingSafeIncludes } from "../util/crypto.ts";
 const API_KEYS_ENV = "API_KEYS";
 
 export const getConfiguredApiKeys = (): string[] =>
-  Deno.env.get(API_KEYS_ENV)?.split(",").filter(Boolean) ?? [];
+  Deno.env.get(API_KEYS_ENV)
+    ?.split(",")
+    .map((apiKey) => apiKey.trim())
+    .filter((apiKey) => apiKey.length > 0) ?? [];
 
 export const createApiKeyMiddleware = (
   apiKeys: readonly string[] = getConfiguredApiKeys(),
