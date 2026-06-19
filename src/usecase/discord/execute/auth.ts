@@ -39,13 +39,8 @@ export const timingSafeStringEqual = (
   const actualBytes = encoder.encode(actual);
   const expectedBytes = encoder.encode(expected);
 
-  const maxLen = Math.max(actualBytes.byteLength, expectedBytes.byteLength);
-  if (maxLen === 0) return true;
-  const paddedActual = new Uint8Array(maxLen);
-  const paddedExpected = new Uint8Array(maxLen);
-  paddedActual.set(actualBytes);
-  paddedExpected.set(expectedBytes);
-  return timingSafeEqual(paddedActual, paddedExpected);
+  if (actualBytes.byteLength !== expectedBytes.byteLength) return false;
+  return timingSafeEqual(actualBytes, expectedBytes);
 };
 
 const readRequiredHeader = (

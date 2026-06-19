@@ -317,6 +317,19 @@ Deno.test({
 
       assertEquals(error.code, "unauthorized");
       assertEquals(error.status, 401);
+
+      const nullByteError = await assertRejects(
+        () =>
+          usecase.executeRegisteredDiscordWebhook({
+            uuid: "registered-1",
+            pathToken: "path-token\0",
+            request: jsonRequest({ content: "hello" }),
+          }),
+        UseCaseError,
+      );
+
+      assertEquals(nullByteError.code, "unauthorized");
+      assertEquals(nullByteError.status, 401);
       assertEquals(sender.calls, []);
     });
   },
