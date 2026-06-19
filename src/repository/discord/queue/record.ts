@@ -23,15 +23,11 @@ export const createQueuedDiscordMessageRecord = (
   createdAt: input.createdAt,
   updatedAt: input.updatedAt,
   attempts: input.attempts,
-  ...(input.claimId === undefined ? {} : {
-    claimId: input.claimId,
-  }),
-  ...(input.processingUntilEpochMs === undefined ? {} : {
-    processingUntilEpochMs: input.processingUntilEpochMs,
-  }),
-  ...(input.lastError === undefined ? {} : {
-    lastError: createQueuedDiscordMessageError(input.lastError),
-  }),
+  claimId: input.claimId,
+  processingUntilEpochMs: input.processingUntilEpochMs,
+  lastError: input.lastError !== undefined
+    ? createQueuedDiscordMessageError(input.lastError)
+    : undefined,
   status: input.status,
 });
 
@@ -47,15 +43,11 @@ export const createQueuedDiscordMessageKvRecord = (
   createdAt: input.createdAt,
   updatedAt: input.updatedAt,
   attempts: input.attempts,
-  ...(input.claimId === undefined ? {} : {
-    claimId: input.claimId,
-  }),
-  ...(input.processingUntilEpochMs === undefined ? {} : {
-    processingUntilEpochMs: input.processingUntilEpochMs,
-  }),
-  ...(input.lastError === undefined ? {} : {
-    lastError: createQueuedDiscordMessageError(input.lastError),
-  }),
+  claimId: input.claimId,
+  processingUntilEpochMs: input.processingUntilEpochMs,
+  lastError: input.lastError !== undefined
+    ? createQueuedDiscordMessageError(input.lastError)
+    : undefined,
   status: input.status,
 });
 
@@ -107,6 +99,6 @@ const createQueuedDiscordMessageError = (
 
   return {
     reason,
-    ...(upstreamStatus === undefined ? {} : { upstreamStatus }),
+    upstreamStatus,
   };
 };

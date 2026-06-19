@@ -73,9 +73,9 @@ export class DiscordWebhookSender implements DiscordSenderPort {
       reason: "rate_limited",
       upstreamStatus: 429,
       retryAfterMs,
-      ...(blockedUntilEpochMs === undefined ? {} : { blockedUntilEpochMs }),
-      ...(scope === undefined ? {} : { scope }),
-      ...(bucket === undefined ? {} : { bucket }),
+      blockedUntilEpochMs,
+      scope,
+      bucket,
     };
   }
 

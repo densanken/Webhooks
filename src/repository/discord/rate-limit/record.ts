@@ -6,10 +6,8 @@ export const createDiscordRateLimitRecord = (
   discordWebhookUrlHash: input.discordWebhookUrlHash,
   blockedUntilEpochMs: input.blockedUntilEpochMs,
   retryAfterMs: input.retryAfterMs,
-  ...(input.reservationId === undefined ? {} : {
-    reservationId: input.reservationId,
-  }),
-  ...(input.scope === undefined ? {} : { scope: input.scope }),
-  ...(input.bucket === undefined ? {} : { bucket: input.bucket }),
+  reservationId: input.reservationId,
+  scope: input.scope,
+  bucket: input.bucket,
   updatedAt: input.updatedAt,
 });

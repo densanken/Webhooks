@@ -92,6 +92,9 @@ Deno.test("DiscordWebhookSender は安全側のレート制限フォールバッ
     reason: "rate_limited",
     upstreamStatus: 429,
     retryAfterMs: 60_000,
+    blockedUntilEpochMs: undefined,
+    scope: undefined,
+    bucket: undefined,
   });
 });
 

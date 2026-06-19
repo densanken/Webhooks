@@ -18,9 +18,7 @@ export const createRegisteredDiscordWebhookKvRecord = (
   input: RegisteredDiscordWebhookKvRecord,
 ): RegisteredDiscordWebhookKvRecord => ({
   uuid: input.uuid,
-  ...(input.description === undefined ? {} : {
-    description: input.description,
-  }),
+  description: input.description,
   encryptedDiscordWebhookUrl: input.encryptedDiscordWebhookUrl,
   discordWebhookUrlHash: input.discordWebhookUrlHash,
   encryptedPathToken: input.encryptedPathToken,
@@ -32,9 +30,7 @@ export const toRegisteredDiscordWebhookSummaryRecord = (
   record: RegisteredDiscordWebhookSummaryRecord,
 ): RegisteredDiscordWebhookSummaryRecord => ({
   uuid: record.uuid,
-  ...(record.description === undefined ? {} : {
-    description: record.description,
-  }),
+  description: record.description,
   createdAt: record.createdAt,
   updatedAt: record.updatedAt,
 });

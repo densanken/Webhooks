@@ -29,7 +29,5 @@ export const toQueuedDiscordMessageError = (
   result: Extract<DiscordSendResult, { ok: false }>,
 ): QueuedDiscordMessageError => ({
   reason: result.reason,
-  ...(result.upstreamStatus === undefined ? {} : {
-    upstreamStatus: result.upstreamStatus,
-  }),
+  upstreamStatus: result.upstreamStatus,
 });

@@ -478,7 +478,10 @@ Deno.test({
 
         assertEquals(failed?.status, "pending");
         assertEquals(failed?.attempts, 1);
-        assertEquals(failed?.lastError, { reason: "network_error" });
+        assertEquals(failed?.lastError, {
+          reason: "network_error",
+          upstreamStatus: undefined,
+        });
         assertEquals(
           (await repository.scanPendingDiscordWebhookMessages()).map((
             record,
@@ -568,6 +571,7 @@ Deno.test({
 
         assertEquals(failed?.lastError, {
           reason: "unknown",
+          upstreamStatus: undefined,
         });
         assert(rawMessage.value);
         assert(!JSON.stringify(rawMessage.value).includes(url));
