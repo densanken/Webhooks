@@ -18,11 +18,7 @@ export const noStoreHeader = {
 };
 
 export const handleAdminError = (error: Error, c: Context): Response => {
-  if (
-    error instanceof HTTPException &&
-    error.status === 400 &&
-    error.message === "Malformed JSON in request body"
-  ) {
+  if (error instanceof HTTPException && error.status === 400) {
     return c.json({
       error: "Validation failed",
       details: [{
