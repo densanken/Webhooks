@@ -114,6 +114,7 @@ export const createTokenAdminRoute = (
         responses: {
           200: {
             description: "動的 Webhook 用トークンの一覧です",
+            headers: noStoreHeader,
             content: jsonContent(WebhookTokenSummaryArraySchema),
           },
           401: {
@@ -122,7 +123,10 @@ export const createTokenAdminRoute = (
           },
         },
       }),
-      async (c) => c.json(await controller.listDynamicWebhookTokens(), 200),
+      async (c) => {
+        c.header("Cache-Control", "no-store");
+        return c.json(await controller.listDynamicWebhookTokens(), 200);
+      },
     )
     .openapi(
       createOpenApiRoute({
@@ -180,6 +184,7 @@ export const createTokenAdminRoute = (
         responses: {
           204: {
             description: "動的 Webhook 用トークンを削除しました",
+            headers: noStoreHeader,
           },
           401: {
             description: "API キーが無効です",
@@ -196,9 +201,9 @@ export const createTokenAdminRoute = (
           c.req.valid("param").uuid,
         );
 
-        return revoked
-          ? c.body(null, 204)
-          : c.json({ error: "Not found" }, 404);
+        if (!revoked) return c.json({ error: "Not Found" }, 404);
+        c.header("Cache-Control", "no-store");
+        return c.body(null, 204);
       },
     );
 

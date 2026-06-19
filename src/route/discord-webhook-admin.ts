@@ -121,6 +121,7 @@ export const createDiscordWebhookAdminRoute = (
         responses: {
           200: {
             description: "登録済み Discord Webhook の一覧です",
+            headers: noStoreHeader,
             content: jsonContent(RegisteredDiscordWebhookSummaryArraySchema),
           },
           401: {
@@ -129,8 +130,10 @@ export const createDiscordWebhookAdminRoute = (
           },
         },
       }),
-      async (c) =>
-        c.json(await controller.listRegisteredDiscordWebhooks(), 200),
+      async (c) => {
+        c.header("Cache-Control", "no-store");
+        return c.json(await controller.listRegisteredDiscordWebhooks(), 200);
+      },
     )
     .openapi(
       createOpenApiRoute({
@@ -223,6 +226,7 @@ export const createDiscordWebhookAdminRoute = (
         responses: {
           204: {
             description: "登録済み Discord Webhook を削除しました",
+            headers: noStoreHeader,
           },
           401: {
             description: "API キーが無効です",
@@ -239,9 +243,9 @@ export const createDiscordWebhookAdminRoute = (
           c.req.valid("param").uuid,
         );
 
-        return revoked
-          ? c.body(null, 204)
-          : c.json({ error: "Not found" }, 404);
+        if (!revoked) return c.json({ error: "Not Found" }, 404);
+        c.header("Cache-Control", "no-store");
+        return c.body(null, 204);
       },
     );
 
