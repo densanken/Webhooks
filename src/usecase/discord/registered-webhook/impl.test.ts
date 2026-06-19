@@ -68,7 +68,79 @@ Deno.test({
 
 Deno.test({
   name:
-    "DiscordRegisteredWebhookUseCase は無効な Discord Webhook URL をエラーに変換する",
+    "DiscordRegisteredWebhookUseCase は存在しない Webhook が必須の場合に NOT Found を投げる",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      const usecase = new DiscordRegisteredWebhookUseCase(
+        new MockDiscordRegisteredWebhookRepository(),
+        {
+          generateUuid: () => "registered-1",
+          generateToken: () => "path-token",
+        },
+      );
+
+      const error = await assertRejects(
+        () => usecase.requireRegisteredDiscordWebhook("nonexistent-uuid"),
+        UseCaseError,
+      );
+
+      assertEquals(error.code, "not_found");
+      assertEquals(error.status, 404);
+      assertStringIncludes(error.message, "nonexistent-uuid");
+    });
+  },
+});
+
+Deno.test({
+  name:
+    "DiscordRegisteredWebhookUseCase は Webhook を更新するか、存在しない場合は null を返す",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      const usecase = new DiscordRegisteredWebhookUseCase(
+        new MockDiscordRegisteredWebhookRepository(),
+        {
+          publicBaseUrl: "https://example.com/",
+          generateUuid: () => "registered-1",
+          generateToken: () => "path-token",
+        },
+      );
+
+      assertEquals(
+        await usecase.updateRegisteredDiscordWebhook("nonexistent-uuid", {
+          description: "irrelevant",
+        }),
+        null,
+      );
+
+      await usecase.createRegisteredDiscordWebhook({
+        description: "original description",
+        discordWebhookUrl: discordWebhookUrl(),
+        now: new Date("2026-06-06T00:00:00.000Z"),
+      });
+
+      const updated = await usecase.updateRegisteredDiscordWebhook(
+        "registered-1",
+        {
+          description: "updated description",
+          now: new Date("2026-06-07T00:00:00.000Z"),
+        },
+      );
+
+      assertEquals(updated, {
+        uuid: "registered-1",
+        description: "updated description",
+        createdAt: "2026-06-06T00:00:00.000Z",
+        updatedAt: "2026-06-07T00:00:00.000Z",
+      });
+    });
+  },
+});
+
+Deno.test({
+  name:
+    "DiscordRegisteredWebhookUseCase は無効な Discord Webhook URL をエラーとする",
   permissions: ENV_PERMISSION,
   fn: async () => {
     await withEncryptionKey(async () => {
