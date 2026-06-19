@@ -13,25 +13,34 @@ const DEFAULT_RETRY_AFTER_MS = 60_000;
 
 export type DiscordWebhookSenderOptions = {
   fetcher?: DiscordWebhookSenderFetcher;
+  timeoutMs?: number;
 };
 
 export class DiscordWebhookSender implements DiscordSenderPort {
   private readonly fetcher: DiscordWebhookSenderFetcher;
+  private readonly timeoutMs: number;
 
   constructor(options: DiscordWebhookSenderOptions = {}) {
     this.fetcher = options.fetcher ?? fetch;
+    this.timeoutMs = options.timeoutMs ?? 10_000;
   }
 
   async sendDiscordWebhook(
     input: DiscordSendInput,
   ): Promise<DiscordSendResult> {
-    const response = await this.fetcher(input.discordWebhookUrl, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(input.body),
-    });
+    let response: Response;
+    try {
+      response = await this.fetcher(input.discordWebhookUrl, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(input.body),
+        signal: AbortSignal.timeout(this.timeoutMs),
+      });
+    } catch {
+      return { ok: false, reason: "network_error" };
+    }
 
     if (response.ok) {
       await response.body?.cancel();
@@ -81,7 +90,7 @@ export class DiscordWebhookSender implements DiscordSenderPort {
     try {
       const body = await response.json();
       return body !== null && typeof body === "object" && !Array.isArray(body)
-        ? body as Record<string, unknown>
+        ? (body as Record<string, unknown>)
         : {};
     } catch {
       return {};
@@ -94,15 +103,18 @@ export class DiscordWebhookSender implements DiscordSenderPort {
   ): number {
     const retryAfterFromBody = body.retry_after;
     if (typeof retryAfterFromBody === "number") {
-      return this.secondsToMilliseconds(retryAfterFromBody) ??
-        DEFAULT_RETRY_AFTER_MS;
+      return (
+        this.secondsToMilliseconds(retryAfterFromBody) ?? DEFAULT_RETRY_AFTER_MS
+      );
     }
 
     const retryAfterHeader = response.headers.get("retry-after") ??
       response.headers.get("x-ratelimit-reset-after");
     if (retryAfterHeader !== null) {
-      return this.secondsToMilliseconds(Number(retryAfterHeader)) ??
-        DEFAULT_RETRY_AFTER_MS;
+      return (
+        this.secondsToMilliseconds(Number(retryAfterHeader)) ??
+          DEFAULT_RETRY_AFTER_MS
+      );
     }
 
     return DEFAULT_RETRY_AFTER_MS;
