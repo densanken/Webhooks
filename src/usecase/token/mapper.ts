@@ -5,7 +5,7 @@ export const toWebhookTokenSummary = (
   record: WebhookTokenRecord,
 ): WebhookTokenSummary => ({
   uuid: record.uuid,
-  description: record.description,
+  description: record.description ?? "",
   createdAt: record.createdAt,
   updatedAt: record.updatedAt,
 });

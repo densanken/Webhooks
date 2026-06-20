@@ -49,7 +49,7 @@ export const CreatedWebhookTokenSchema = z.object({
 }).openapi("CreatedDynamicWebhookToken");
 
 export const UpdateWebhookTokenRequestSchema = z.object({
-  description: DescriptionSchema,
+  description: DescriptionSchema.optional(),
 }).openapi("UpdateDynamicWebhookTokenRequest");
 
 export const UpdatedWebhookTokenSchema = z.object({

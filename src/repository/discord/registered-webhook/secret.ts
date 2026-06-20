@@ -1,7 +1,7 @@
 import {
   registeredDiscordWebhookUrlLabel,
   registeredWebhookPathTokenLabel,
-} from "../../../infrastructure/discord-webhook-secret.ts";
+} from "../../../util/discord/webhook-crypto.ts";
 import { decryptString } from "../../../util/crypto.ts";
 import type { RegisteredDiscordWebhookKvRecord } from "./record.ts";
 

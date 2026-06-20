@@ -1,6 +1,6 @@
 export type WebhookTokenSummary = {
   uuid: string;
-  description?: string;
+  description: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -10,12 +10,12 @@ export type CreatedWebhookToken = WebhookTokenSummary & {
 };
 
 export type CreateWebhookTokenInput = {
-  description?: string;
+  description: string;
   now?: Date;
 };
 
 export type UpdateWebhookTokenInput = {
-  description: string;
+  description?: string;
   now?: Date;
 };
 
@@ -26,7 +26,7 @@ export type WebhookTokenUseCaseOptions = {
 
 export interface WebhookTokenUseCaseInterface {
   createDynamicWebhookToken(
-    input?: CreateWebhookTokenInput,
+    input: CreateWebhookTokenInput,
   ): Promise<CreatedWebhookToken>;
   listDynamicWebhookTokens(): Promise<WebhookTokenSummary[]>;
   updateDynamicWebhookToken(

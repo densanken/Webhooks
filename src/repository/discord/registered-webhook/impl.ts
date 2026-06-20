@@ -7,7 +7,7 @@ import {
   normalizeAndEncryptDiscordWebhookUrl,
   registeredDiscordWebhookUrlLabel,
   registeredWebhookPathTokenLabel,
-} from "../../../infrastructure/discord-webhook-secret.ts";
+} from "../../../util/discord/webhook-crypto.ts";
 import { WebhookRepositoryConflictError } from "../../error/impl.ts";
 import { encryptString } from "../../../util/crypto.ts";
 import type {

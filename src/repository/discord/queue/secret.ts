@@ -1,6 +1,6 @@
 import {
   queueDiscordWebhookUrlLabel,
-} from "../../../infrastructure/discord-webhook-secret.ts";
+} from "../../../util/discord/webhook-crypto.ts";
 import { decryptString } from "../../../util/crypto.ts";
 import type { QueuedDiscordMessageKvRecord } from "./record.ts";
 

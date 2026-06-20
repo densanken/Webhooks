@@ -1,7 +1,7 @@
 import { discordRateLimitKey } from "../../../infrastructure/kv/discord-key.ts";
 import {
   normalizeAndHashDiscordWebhookUrl,
-} from "../../../infrastructure/discord-webhook-secret.ts";
+} from "../../../util/discord/webhook-url.ts";
 import type {
   DiscordRateLimitRecord,
   DiscordRateLimitRepositoryInterface,

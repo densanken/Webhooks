@@ -155,6 +155,7 @@ Deno.test({
       const error = await assertRejects(
         () =>
           usecase.createRegisteredDiscordWebhook({
+            description: "test",
             discordWebhookUrl: "https://example.com/not-discord",
           }),
         UseCaseError,

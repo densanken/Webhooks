@@ -85,7 +85,7 @@ export const RegisteredDiscordWebhookDetailSchema = z.object({
 }).openapi("RegisteredDiscordWebhookDetail");
 
 export const UpdateRegisteredDiscordWebhookRequestSchema = z.object({
-  description: DescriptionSchema,
+  description: DescriptionSchema.optional(),
 }).openapi("UpdateRegisteredDiscordWebhookRequest");
 
 export const UpdatedRegisteredDiscordWebhookSchema = z.object({

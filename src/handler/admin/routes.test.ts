@@ -517,7 +517,7 @@ Deno.test("Webhook 管理ルートが OpenAPI ドキュメントに含まれる"
   );
   assertEquals(
     requiredProperties("UpdateRegisteredDiscordWebhookRequest"),
-    ["description"],
+    undefined,
   );
   assertEquals(
     requiredProperties("UpdatedRegisteredDiscordWebhook"),
@@ -535,7 +535,7 @@ Deno.test("Webhook 管理ルートが OpenAPI ドキュメントに含まれる"
   );
   assertEquals(
     requiredProperties("UpdateDynamicWebhookTokenRequest"),
-    ["description"],
+    undefined,
   );
   assertEquals(
     requiredProperties("UpdatedDynamicWebhookToken"),

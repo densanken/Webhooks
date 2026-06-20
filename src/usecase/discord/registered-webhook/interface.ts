@@ -1,6 +1,6 @@
 export type RegisteredDiscordWebhookSummary = {
   uuid: string;
-  description?: string;
+  description: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -14,12 +14,12 @@ export type RegisteredDiscordWebhookDetail =
 
 export type CreateRegisteredDiscordWebhookInput = {
   discordWebhookUrl: string;
-  description?: string;
+  description: string;
   now?: Date;
 };
 
 export type UpdateRegisteredDiscordWebhookInput = {
-  description: string;
+  description?: string;
   now?: Date;
 };
 

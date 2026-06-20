@@ -22,7 +22,7 @@ export class WebhookTokenUseCase implements WebhookTokenUseCaseInterface {
   }
 
   async createDynamicWebhookToken(
-    input: CreateWebhookTokenInput = {},
+    input: CreateWebhookTokenInput,
   ): Promise<CreatedWebhookToken> {
     const token = this.generateToken();
     const record = await this.repository.createDynamicWebhookToken({

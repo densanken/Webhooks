@@ -25,12 +25,10 @@ export type TokenAdminRouteOptions = {
 
 export const DYNAMIC_WEBHOOK_TOKEN_TAG = "Dynamic Webhook Tokens";
 
-const requiredDescription = (description: string | undefined): string =>
-  description ?? "";
-
 export const createTokenAdminRoute = (
   options: TokenAdminRouteOptions,
 ) => {
+  const { webhookTokenUseCase } = options;
   const route = new OpenAPIHono({
     strict: false,
     defaultHook: (result, c) => {
@@ -95,11 +93,11 @@ export const createTokenAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const created = await options.webhookTokenUseCase
+        const created = await webhookTokenUseCase
           .createDynamicWebhookToken(c.req.valid("json"));
         return c.json({
           uuid: created.uuid,
-          description: requiredDescription(created.description),
+          description: created.description,
           token: created.token,
           createdAt: created.createdAt,
         }, 201);
@@ -125,15 +123,9 @@ export const createTokenAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const tokens = await options.webhookTokenUseCase
+        const tokens = await webhookTokenUseCase
           .listDynamicWebhookTokens();
-        return c.json(
-          tokens.map((token) => ({
-            ...token,
-            description: requiredDescription(token.description),
-          })),
-          200,
-        );
+        return c.json(tokens, 200);
       },
     )
     .openapi(
@@ -171,17 +163,13 @@ export const createTokenAdminRoute = (
       async (c) => {
         c.header("Cache-Control", "no-store");
         const { description } = c.req.valid("json");
-        const updated = await options.webhookTokenUseCase
+        const updated = await webhookTokenUseCase
           .updateDynamicWebhookToken(c.req.valid("param").uuid, {
             description,
           });
 
-        return updated
-          ? c.json({
-            ...updated,
-            description: requiredDescription(updated.description),
-          }, 200)
-          : c.json({ error: "Not found" }, 404);
+        if (!updated) return c.json({ error: "Not found" }, 404);
+        return c.json(updated, 200);
       },
     )
     .openapi(
@@ -209,7 +197,7 @@ export const createTokenAdminRoute = (
         },
       }),
       async (c) => {
-        const revoked = await options.webhookTokenUseCase
+        const revoked = await webhookTokenUseCase
           .revokeDynamicWebhookToken(c.req.valid("param").uuid);
 
         if (!revoked) return c.json({ error: "Not Found" }, 404);
