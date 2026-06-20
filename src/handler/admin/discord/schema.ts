@@ -86,7 +86,10 @@ export const RegisteredDiscordWebhookDetailSchema = z.object({
 
 export const UpdateRegisteredDiscordWebhookRequestSchema = z.object({
   description: DescriptionSchema.optional(),
-}).openapi("UpdateRegisteredDiscordWebhookRequest");
+}).openapi("UpdateRegisteredDiscordWebhookRequest").refine(
+  (data) => Object.values(data).some((v) => v !== undefined),
+  { message: "少なくとも1つのフィールドを指定してください" },
+);
 
 export const UpdatedRegisteredDiscordWebhookSchema = z.object({
   uuid: UuidSchema,

@@ -57,7 +57,9 @@ export class MockWebhookTokenRepository
 
     const updatedRecord = createWebhookTokenRecord({
       ...record,
-      description: input.description,
+      description: input.description === undefined
+        ? record.description
+        : input.description,
       updatedAt: (input.now ?? new Date()).toISOString(),
     });
     this.records = this.records.map((record) =>

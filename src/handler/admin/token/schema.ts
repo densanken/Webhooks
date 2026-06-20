@@ -50,7 +50,10 @@ export const CreatedWebhookTokenSchema = z.object({
 
 export const UpdateWebhookTokenRequestSchema = z.object({
   description: DescriptionSchema.optional(),
-}).openapi("UpdateDynamicWebhookTokenRequest");
+}).openapi("UpdateDynamicWebhookTokenRequest").refine(
+  (data) => Object.values(data).some((v) => v !== undefined),
+  { message: "少なくとも1つのフィールドを指定してください" },
+);
 
 export const UpdatedWebhookTokenSchema = z.object({
   uuid: UuidSchema,
