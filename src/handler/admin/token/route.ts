@@ -3,17 +3,10 @@ import {
   OpenAPIHono,
 } from "@hono/zod-openapi";
 
-import {
-  createTokenAdminController,
-  type TokenAdminControllerDependencies,
-} from "../controller/token-admin.ts";
-import { createApiKeyMiddleware } from "../middleware/api.ts";
-import { requireJsonContentType } from "../middleware/json-content-type.ts";
-import {
-  handleAdminError,
-  jsonContent,
-  noStoreHeader,
-} from "./admin-helpers.ts";
+import { createApiKeyMiddleware } from "../../../middleware/api.ts";
+import { requireJsonContentType } from "../../../middleware/json-content-type.ts";
+import { handleAdminError, jsonContent, noStoreHeader } from "../helpers.ts";
+import type { WebhookTokenUseCaseInterface } from "../../../usecase/token/interface.ts";
 import {
   CreatedWebhookTokenSchema,
   CreateWebhookTokenRequestSchema,
@@ -23,18 +16,21 @@ import {
   UpdateWebhookTokenRequestSchema,
   ValidationErrorResponseSchema,
   WebhookTokenSummaryArraySchema,
-} from "./token-admin.schema.ts";
+} from "./schema.ts";
 
-export type TokenAdminRouteOptions = TokenAdminControllerDependencies & {
+export type TokenAdminRouteOptions = {
+  webhookTokenUseCase: WebhookTokenUseCaseInterface;
   apiKeys?: readonly string[];
 };
 
 export const DYNAMIC_WEBHOOK_TOKEN_TAG = "Dynamic Webhook Tokens";
 
+const requiredDescription = (description: string | undefined): string =>
+  description ?? "";
+
 export const createTokenAdminRoute = (
   options: TokenAdminRouteOptions,
 ) => {
-  const controller = createTokenAdminController(options);
   const route = new OpenAPIHono({
     strict: false,
     defaultHook: (result, c) => {
@@ -99,10 +95,14 @@ export const createTokenAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        return c.json(
-          await controller.createDynamicWebhookToken(c.req.valid("json")),
-          201,
-        );
+        const created = await options.webhookTokenUseCase
+          .createDynamicWebhookToken(c.req.valid("json"));
+        return c.json({
+          uuid: created.uuid,
+          description: requiredDescription(created.description),
+          token: created.token,
+          createdAt: created.createdAt,
+        }, 201);
       },
     )
     .openapi(
@@ -125,7 +125,15 @@ export const createTokenAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        return c.json(await controller.listDynamicWebhookTokens(), 200);
+        const tokens = await options.webhookTokenUseCase
+          .listDynamicWebhookTokens();
+        return c.json(
+          tokens.map((token) => ({
+            ...token,
+            description: requiredDescription(token.description),
+          })),
+          200,
+        );
       },
     )
     .openapi(
@@ -162,13 +170,17 @@ export const createTokenAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const updated = await controller.updateDynamicWebhookToken(
-          c.req.valid("param").uuid,
-          c.req.valid("json"),
-        );
+        const { description } = c.req.valid("json");
+        const updated = await options.webhookTokenUseCase
+          .updateDynamicWebhookToken(c.req.valid("param").uuid, {
+            description,
+          });
 
         return updated
-          ? c.json(updated, 200)
+          ? c.json({
+            ...updated,
+            description: requiredDescription(updated.description),
+          }, 200)
           : c.json({ error: "Not found" }, 404);
       },
     )
@@ -197,9 +209,8 @@ export const createTokenAdminRoute = (
         },
       }),
       async (c) => {
-        const revoked = await controller.revokeDynamicWebhookToken(
-          c.req.valid("param").uuid,
-        );
+        const revoked = await options.webhookTokenUseCase
+          .revokeDynamicWebhookToken(c.req.valid("param").uuid);
 
         if (!revoked) return c.json({ error: "Not Found" }, 404);
         c.header("Cache-Control", "no-store");

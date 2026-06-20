@@ -1,9 +1,9 @@
 import { assert, assertEquals, assertStringIncludes } from "@std/assert";
 import { Hono } from "hono";
 
-import { createSessionValue } from "../middleware/doc.ts";
-import { withMemoryKv } from "../test-helper/webhook.ts";
-import { createApiRoute } from "./api.ts";
+import { createSessionValue } from "../../middleware/doc.ts";
+import { withMemoryKv } from "../../test-helper/webhook.ts";
+import { createApiRoute } from "./route.ts";
 import { type DocOAuthConfig, parseAllowedGuildIds } from "./doc-oauth.ts";
 
 const TEST_SESSION_SECRET = "test-session-secret-for-hmac-signing";

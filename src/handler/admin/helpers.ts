@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 
-import { UseCaseError } from "../usecase/error/impl.ts";
+import { UseCaseError } from "../../usecase/error/impl.ts";
 
 export const jsonContent = <T>(schema: T) => ({
   "application/json": { schema },

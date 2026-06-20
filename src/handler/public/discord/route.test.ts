@@ -1,22 +1,22 @@
 import { assertEquals } from "@std/assert";
 import { Hono } from "hono";
 
-import { DiscordRateLimitRepository } from "../repository/discord/rate-limit/impl.ts";
-import { DiscordQueueRepository } from "../repository/discord/queue/impl.ts";
-import { WebhookTokenRepository } from "../repository/token/impl.ts";
-import { DiscordRegisteredWebhookRepository } from "../repository/discord/registered-webhook/impl.ts";
+import { DiscordRateLimitRepository } from "../../../repository/discord/rate-limit/impl.ts";
+import { DiscordQueueRepository } from "../../../repository/discord/queue/impl.ts";
+import { WebhookTokenRepository } from "../../../repository/token/impl.ts";
+import { DiscordRegisteredWebhookRepository } from "../../../repository/discord/registered-webhook/impl.ts";
 import {
   discordWebhookUrl,
   ENV_PERMISSION,
   withEncryptionKey,
   withMemoryKv,
-} from "../test-helper/webhook.ts";
+} from "../../../test-helper/webhook.ts";
 import type {
   DiscordSender,
   DiscordSendInput,
   DiscordSendResult,
-} from "../usecase/discord/sender/interface.ts";
-import { createDiscordWebhookRoute } from "./discord-webhook.ts";
+} from "../../../usecase/discord/sender/interface.ts";
+import { createDiscordWebhookRoute } from "./route.ts";
 
 const REGISTERED_UUID = "registered-1";
 const PATH_TOKEN = "path-token";
