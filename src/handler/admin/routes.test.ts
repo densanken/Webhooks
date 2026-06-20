@@ -334,6 +334,42 @@ Deno.test("動的 Webhook 用トークン管理ルートはトークンを管理
   assertEquals(missingResponse.status, 404);
 });
 
+Deno.test("Webhook 管理ルートは有効なフィールドのない PATCH ボディを拒否する", async () => {
+  const app = createTestApp();
+
+  for (
+    const { path, label, body } of [
+      {
+        path: `/api/tokens/${DYNAMIC_TOKEN_UUID}`,
+        label: "token empty body",
+        body: {},
+      },
+      {
+        path: `/api/tokens/${DYNAMIC_TOKEN_UUID}`,
+        label: "token typo field only",
+        body: { descripton: "typo" },
+      },
+      {
+        path: `/api/discord/webhooks/${REGISTERED_UUID}`,
+        label: "discord empty body",
+        body: {},
+      },
+      {
+        path: `/api/discord/webhooks/${REGISTERED_UUID}`,
+        label: "discord typo field only",
+        body: { descripton: "typo" },
+      },
+    ]
+  ) {
+    const response = await app.request(path, {
+      method: "PATCH",
+      headers: authorizedHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify(body),
+    });
+    assertEquals(response.status, 400, label);
+  }
+});
+
 Deno.test("Webhook 管理ルートは欠落した説明フィールドを正規化する", async () => {
   const registeredRepository = new MockDiscordRegisteredWebhookRepository();
   const registered = await registeredRepository.createRegisteredDiscordWebhook(
@@ -517,7 +553,7 @@ Deno.test("Webhook 管理ルートが OpenAPI ドキュメントに含まれる"
   );
   assertEquals(
     requiredProperties("UpdateRegisteredDiscordWebhookRequest"),
-    ["description"],
+    undefined,
   );
   assertEquals(
     requiredProperties("UpdatedRegisteredDiscordWebhook"),
@@ -535,7 +571,7 @@ Deno.test("Webhook 管理ルートが OpenAPI ドキュメントに含まれる"
   );
   assertEquals(
     requiredProperties("UpdateDynamicWebhookTokenRequest"),
-    ["description"],
+    undefined,
   );
   assertEquals(
     requiredProperties("UpdatedDynamicWebhookToken"),

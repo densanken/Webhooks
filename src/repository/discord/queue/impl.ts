@@ -8,7 +8,7 @@ import {
 import {
   normalizeAndEncryptDiscordWebhookUrl,
   queueDiscordWebhookUrlLabel,
-} from "../../../infrastructure/discord-webhook-secret.ts";
+} from "../../../util/discord/webhook-crypto.ts";
 import { WebhookRepositoryConflictError } from "../../error/impl.ts";
 import type {
   ClaimDiscordWebhookMessageInput,

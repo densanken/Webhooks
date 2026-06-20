@@ -11,7 +11,7 @@ export const toRegisteredDiscordWebhookSummary = (
   record: RegisteredDiscordWebhookSummaryRecord,
 ): RegisteredDiscordWebhookSummary => ({
   uuid: record.uuid,
-  description: record.description,
+  description: record.description ?? "",
   createdAt: record.createdAt,
   updatedAt: record.updatedAt,
 });

@@ -1,9 +1,5 @@
-import { parseDiscordWebhookUrl } from "../util/discord/webhook-url.ts";
-import {
-  type EncryptedString,
-  encryptString,
-  hashString,
-} from "../util/crypto.ts";
+import { type EncryptedString, encryptString } from "../crypto.ts";
+import { normalizeAndHashDiscordWebhookUrl } from "./webhook-url.ts";
 
 export type { EncryptedString };
 
@@ -21,17 +17,6 @@ export const registeredWebhookPathTokenLabel = (uuid: string): string =>
 
 export const queueDiscordWebhookUrlLabel = (messageId: string): string =>
   `queue-discord-webhook-url:${messageId}`;
-
-export const normalizeAndHashDiscordWebhookUrl = async (
-  discordWebhookUrl: string,
-): Promise<{ url: string; hash: string }> => {
-  const parsedUrl = parseDiscordWebhookUrl(discordWebhookUrl);
-
-  return {
-    url: parsedUrl.url,
-    hash: await hashString(parsedUrl.url),
-  };
-};
 
 export const normalizeAndEncryptDiscordWebhookUrl = async (
   label: string,

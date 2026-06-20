@@ -1,3 +1,5 @@
+import { hashString } from "../crypto.ts";
+
 const DISCORD_WEBHOOK_HOSTS = new Set(["discord.com", "discordapp.com"]);
 const DISCORD_SNOWFLAKE_PATTERN = /^[1-9]\d{16,18}$/;
 const DISCORD_WEBHOOK_TOKEN_PATTERN = /^[A-Za-z0-9._-]{32,256}$/;
@@ -97,6 +99,17 @@ export const parseDiscordWebhookUrl = (
     host,
     webhookId,
     webhookToken,
+  };
+};
+
+export const normalizeAndHashDiscordWebhookUrl = async (
+  discordWebhookUrl: string,
+): Promise<{ url: string; hash: string }> => {
+  const parsedUrl = parseDiscordWebhookUrl(discordWebhookUrl);
+
+  return {
+    url: parsedUrl.url,
+    hash: await hashString(parsedUrl.url),
   };
 };
 

@@ -26,12 +26,10 @@ export type DiscordWebhookAdminRouteOptions = {
 
 export const REGISTERED_DISCORD_WEBHOOK_TAG = "Registered Discord Webhooks";
 
-const requiredDescription = (description: string | undefined): string =>
-  description ?? "";
-
 export const createDiscordWebhookAdminRoute = (
   options: DiscordWebhookAdminRouteOptions,
 ) => {
+  const { registeredDiscordWebhookUseCase } = options;
   const route = new OpenAPIHono({
     strict: false,
     defaultHook: (result, c) => {
@@ -98,11 +96,11 @@ export const createDiscordWebhookAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const created = await options.registeredDiscordWebhookUseCase
+        const created = await registeredDiscordWebhookUseCase
           .createRegisteredDiscordWebhook(c.req.valid("json"));
         return c.json({
           uuid: created.uuid,
-          description: requiredDescription(created.description),
+          description: created.description,
           webhookUrl: created.webhookUrl,
           discordWebhookUrl: created.discordWebhookUrl,
           createdAt: created.createdAt,
@@ -129,15 +127,9 @@ export const createDiscordWebhookAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const webhooks = await options.registeredDiscordWebhookUseCase
+        const webhooks = await registeredDiscordWebhookUseCase
           .listRegisteredDiscordWebhooks();
-        return c.json(
-          webhooks.map((webhook) => ({
-            ...webhook,
-            description: requiredDescription(webhook.description),
-          })),
-          200,
-        );
+        return c.json(webhooks, 200);
       },
     )
     .openapi(
@@ -167,11 +159,11 @@ export const createDiscordWebhookAdminRoute = (
       }),
       async (c) => {
         c.header("Cache-Control", "no-store");
-        const webhook = await options.registeredDiscordWebhookUseCase
+        const webhook = await registeredDiscordWebhookUseCase
           .requireRegisteredDiscordWebhook(c.req.valid("param").uuid);
         return c.json({
           uuid: webhook.uuid,
-          description: requiredDescription(webhook.description),
+          description: webhook.description,
           discordWebhookUrl: webhook.discordWebhookUrl,
           webhookUrl: webhook.webhookUrl,
           createdAt: webhook.createdAt,
@@ -214,17 +206,13 @@ export const createDiscordWebhookAdminRoute = (
       async (c) => {
         c.header("Cache-Control", "no-store");
         const { description } = c.req.valid("json");
-        const updated = await options.registeredDiscordWebhookUseCase
+        const updated = await registeredDiscordWebhookUseCase
           .updateRegisteredDiscordWebhook(c.req.valid("param").uuid, {
             description,
           });
 
-        return updated
-          ? c.json({
-            ...updated,
-            description: requiredDescription(updated.description),
-          }, 200)
-          : c.json({ error: "Not found" }, 404);
+        if (!updated) return c.json({ error: "Not found" }, 404);
+        return c.json(updated, 200);
       },
     )
     .openapi(
@@ -252,7 +240,7 @@ export const createDiscordWebhookAdminRoute = (
         },
       }),
       async (c) => {
-        const revoked = await options.registeredDiscordWebhookUseCase
+        const revoked = await registeredDiscordWebhookUseCase
           .revokeRegisteredDiscordWebhook(c.req.valid("param").uuid);
 
         if (!revoked) return c.json({ error: "Not Found" }, 404);
