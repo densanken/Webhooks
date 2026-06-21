@@ -5,7 +5,7 @@
     "jsr:@std/crypto@1.1.0": "1.1.0",
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "npm:@hono/oauth-providers@0.8.5": "0.8.5_hono@4.12.26",
-    "npm:@hono/zod-openapi@1.4.0": "1.4.0_hono@4.12.26",
+    "npm:@hono/zod-openapi@1.4.0": "1.4.0_hono@4.12.26_zod@4.4.3",
     "npm:@scalar/hono-api-reference@0.11.4": "0.11.4_hono@4.12.26",
     "npm:ajv@8.20.0": "8.20.0",
     "npm:discord-api-types@0.38.49": "0.38.49",
@@ -40,7 +40,7 @@
         "hono"
       ]
     },
-    "@hono/zod-openapi@1.4.0_hono@4.12.26": {
+    "@hono/zod-openapi@1.4.0_hono@4.12.26_zod@4.4.3": {
       "integrity": "sha512-AFchqR1N/NxfI4hUOSGI2/g8zLROxA1OE7Oh5JJFlTaGxhrdRyH+93gd0tIBpb0z8s9r8hUoNnaOBfHbdb4NMw==",
       "dependencies": [
         "@asteasolutions/zod-to-openapi",
