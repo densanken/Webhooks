@@ -99,15 +99,7 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
       throw unauthorizedError("Invalid dynamic webhook token");
     }
 
-    if (this.guildWebhooksUseCase) {
-      if (!tokenRecord.owner?.guildId) {
-        throw new UseCaseError(
-          "invalid_request",
-          "Dynamic webhook token has no guild association; cannot validate webhook URL",
-          400,
-        );
-      }
-
+    if (this.guildWebhooksUseCase && tokenRecord.owner?.guildId) {
       let parsed;
       try {
         parsed = parseDiscordWebhookUrl(discordWebhookUrl);
@@ -118,9 +110,10 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
         throw error;
       }
 
+      const { guildId } = tokenRecord.owner;
       const allowed = await this.guildWebhooksUseCase
         .isGuildWebhookWithRefresh(
-          tokenRecord.owner.guildId,
+          guildId,
           parsed.webhookId,
         );
       if (!allowed) {

@@ -31,8 +31,14 @@ export const composeDiscordWebhookUseCase = async (
         { botToken },
       );
     }
-  } catch {
-    // env access not permitted (e.g. in tests)
+  } catch (error) {
+    // テスト時は --allow-env なしで実行されるため、環境変数アクセスの権限エラーのみ許容する
+    if (
+      !(error instanceof Deno.errors.PermissionDenied) &&
+      !(error instanceof Deno.errors.NotCapable)
+    ) {
+      throw error;
+    }
   }
 
   return new DiscordExecuteUseCase({

@@ -56,8 +56,6 @@ export const handleSync = async (
   ctx: GuildContext,
 ): Promise<APIInteractionResponse> => {
   const { guildId, member } = ctx;
-  const admin = isAdmin(member.permissions);
-
   const remaining = await getSyncCooldownRemaining(guildId);
 
   if (remaining !== null) {
@@ -72,6 +70,7 @@ export const handleSync = async (
 
   await setSyncCooldown(guildId);
 
+  const admin = isAdmin(member.permissions);
   const { discordApplicationId } = deps.env;
   const { token: interactionToken } = interaction;
 

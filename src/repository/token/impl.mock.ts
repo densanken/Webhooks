@@ -30,6 +30,7 @@ export class MockWebhookTokenRepository
       tokenHash: await hashString(input.token),
       createdAt,
       updatedAt: createdAt,
+      owner: input.owner,
     });
 
     this.records = [...this.records, record];
@@ -60,6 +61,7 @@ export class MockWebhookTokenRepository
       description: input.description === undefined
         ? record.description
         : input.description,
+      owner: input.owner === undefined ? record.owner : input.owner,
       updatedAt: (input.now ?? new Date()).toISOString(),
     });
     this.records = this.records.map((record) =>

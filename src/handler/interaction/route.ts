@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { bodyLimit } from "hono/body-limit";
 
 import type { DiscordRegisteredWebhookUseCaseInterface } from "../../usecase/discord/registered-webhook/interface.ts";
 import type { WebhookTokenUseCaseInterface } from "../../usecase/token/interface.ts";
@@ -50,7 +51,9 @@ export const createInteractionsRoute = async (
     throw error;
   }
 
-  const app = new Hono();
+  const app = new Hono({ strict: false });
+
+  app.use(bodyLimit({ maxSize: 256 * 1024 })); // 256 KiB
 
   app.post("/", async (c) => {
     const signature = c.req.header("x-signature-ed25519");

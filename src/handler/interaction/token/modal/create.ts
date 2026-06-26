@@ -2,7 +2,6 @@ import {
   type APIInteractionResponse,
   type APIModalSubmitInteraction,
 } from "discord-api-types/v10";
-import type { DiscordResourceOwner } from "../../../../repository/discord/owner.ts";
 import type { GuildContext, InteractionsDependencies } from "../../route.ts";
 import {
   EmbedColor,
@@ -14,7 +13,6 @@ import {
   getUserAvatarUrl,
   getUserDisplayName,
 } from "../../../../util/discord/interaction/format.ts";
-import { resolveGuildMember } from "../../../../util/discord/interaction/resolve-guild-member.ts";
 
 export const handleCreateWebhookTokenModal = async (
   interaction: APIModalSubmitInteraction,
@@ -23,10 +21,6 @@ export const handleCreateWebhookTokenModal = async (
 ): Promise<APIInteractionResponse> => {
   const { guildId, member } = ctx;
   const { user } = member;
-  const { custom_id: customId } = interaction.data;
-  const ownerIdFromCustomId = customId === "webhook.token.create.modal"
-    ? undefined
-    : customId.replace("webhook.token.create.modal:", "");
 
   const description = extractModalValue(interaction, "description")?.trim();
   if (!description) {
@@ -36,7 +30,7 @@ export const handleCreateWebhookTokenModal = async (
     });
   }
 
-  let owner: DiscordResourceOwner = {
+  const owner = {
     guildId,
     discordUserId: user.id,
     username: user.username,
@@ -45,21 +39,6 @@ export const handleCreateWebhookTokenModal = async (
     avatarHash: user.avatar ?? null,
     discriminator: user.discriminator ?? "0",
   };
-
-  if (ownerIdFromCustomId) {
-    const resolved = await resolveGuildMember(
-      deps.env.discordBotToken,
-      guildId,
-      ownerIdFromCustomId,
-    );
-    if (resolved) {
-      owner = {
-        guildId,
-        discordUserId: ownerIdFromCustomId,
-        ...resolved,
-      };
-    }
-  }
 
   const created = await deps.tokenUseCase.createDynamicWebhookToken({
     description,

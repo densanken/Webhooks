@@ -16,14 +16,21 @@ export const sendFollowup = async (
     color: EmbedColor.Default,
   };
 
-  await fetch(followupUrl(applicationId, interactionToken), {
+  const response = await fetch(followupUrl(applicationId, interactionToken), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       embeds: [embed],
       flags: MessageFlags.Ephemeral,
     }),
+    signal: AbortSignal.timeout(30_000),
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `Discord followup failed: ${response.status} ${response.statusText}`,
+    );
+  }
 };
 
 export const sendFollowupEmbed = async (
@@ -31,12 +38,19 @@ export const sendFollowupEmbed = async (
   interactionToken: string,
   embed: APIEmbed,
 ): Promise<void> => {
-  await fetch(followupUrl(applicationId, interactionToken), {
+  const response = await fetch(followupUrl(applicationId, interactionToken), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       embeds: [embed],
       flags: MessageFlags.Ephemeral,
     }),
+    signal: AbortSignal.timeout(30_000),
   });
+
+  if (!response.ok) {
+    throw new Error(
+      `Discord followup failed: ${response.status} ${response.statusText}`,
+    );
+  }
 };

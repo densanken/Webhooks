@@ -110,6 +110,7 @@ export class GuildWebhooksUseCase implements GuildWebhooksUseCaseInterface {
         headers: {
           authorization: `Bot ${this.botToken}`,
         },
+        signal: AbortSignal.timeout(5000),
       },
     );
 

@@ -37,8 +37,9 @@ const main = async () => {
     "content-type": "application/json",
   };
 
-  const globalUrl =
-    `https://discord.com/api/v10/applications/${encodeURIComponent(applicationId)}/commands`;
+  const globalUrl = `https://discord.com/api/v10/applications/${
+    encodeURIComponent(applicationId)
+  }/commands`;
   const globalResponse = await fetch(globalUrl, { headers });
   if (globalResponse.ok) {
     const globalCommands: { id: string; name: string }[] = await globalResponse
@@ -55,9 +56,12 @@ const main = async () => {
     await globalResponse.body?.cancel();
   }
 
+  const failedGuildIds: string[] = [];
+
   for (const guildId of allowedGuildIds) {
-    const url =
-      `https://discord.com/api/v10/applications/${encodeURIComponent(applicationId)}/guilds/${encodeURIComponent(guildId)}/commands`;
+    const url = `https://discord.com/api/v10/applications/${
+      encodeURIComponent(applicationId)
+    }/guilds/${encodeURIComponent(guildId)}/commands`;
 
     const response = await fetch(url, {
       method: "PUT",
@@ -70,11 +74,19 @@ const main = async () => {
       console.error(
         `Failed to register commands for guild ${guildId}: ${response.status} ${body}`,
       );
+      failedGuildIds.push(guildId);
       continue;
     }
 
     await response.body?.cancel();
     console.log(`Registered commands for guild ${guildId}`);
+  }
+
+  if (failedGuildIds.length > 0) {
+    console.error(
+      `Command registration failed for guilds: ${failedGuildIds.join(", ")}`,
+    );
+    Deno.exit(1);
   }
 };
 

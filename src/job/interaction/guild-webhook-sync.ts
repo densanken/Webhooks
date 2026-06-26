@@ -37,16 +37,27 @@ export const syncAllGuildWebhooks = async (): Promise<void> => {
     let totalUpdated = 0;
     let totalRemoved = 0;
 
+    let failedGuilds = 0;
+
     for (const guildId of allowedGuildIds) {
-      const result = await useCase.syncGuildWebhooks(guildId);
-      totalFetched += result.fetched;
-      totalAdded += result.added;
-      totalUpdated += result.updated;
-      totalRemoved += result.removed;
+      try {
+        const result = await useCase.syncGuildWebhooks(guildId);
+        totalFetched += result.fetched;
+        totalAdded += result.added;
+        totalUpdated += result.updated;
+        totalRemoved += result.removed;
+      } catch (error) {
+        failedGuilds++;
+        console.error(
+          `[cron:${DISCORD_GUILD_WEBHOOK_SYNC_CRON_NAME}] guild=${guildId} failed: ${
+            error instanceof Error ? error.message : String(error)
+          }`,
+        );
+      }
     }
 
     console.log(
-      `[cron:${DISCORD_GUILD_WEBHOOK_SYNC_CRON_NAME}] guilds=${allowedGuildIds.length} fetched=${totalFetched} added=${totalAdded} updated=${totalUpdated} removed=${totalRemoved}`,
+      `[cron:${DISCORD_GUILD_WEBHOOK_SYNC_CRON_NAME}] guilds=${allowedGuildIds.length} failed=${failedGuilds} fetched=${totalFetched} added=${totalAdded} updated=${totalUpdated} removed=${totalRemoved}`,
     );
   } catch (error) {
     console.error(

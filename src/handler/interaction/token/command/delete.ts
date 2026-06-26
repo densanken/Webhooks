@@ -67,7 +67,7 @@ const createDeleteEmbed = (
   },
   fields: [
     {
-      name: "Webhook ID",
+      name: "Token ID",
       value: `\`${token.uuid}\``,
     },
     {

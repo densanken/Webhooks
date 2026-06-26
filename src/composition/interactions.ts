@@ -21,7 +21,12 @@ export const composeInteractionsDependencies = (
     ",",
   ).map((id) => id.trim())
     .filter((id) => id !== "");
-  const publicBaseUrl = Deno.env.get("PUBLIC_BASE_URL") ?? "";
+  let publicBaseUrl = "";
+  try {
+    publicBaseUrl = Deno.env.get("PUBLIC_BASE_URL") ?? "";
+  } catch {
+    // permission denied under restricted --allow-env; treat as unset
+  }
 
   const registeredWebhookUseCase = new DiscordRegisteredWebhookUseCase(
     new DiscordRegisteredWebhookRepository(options.kv),

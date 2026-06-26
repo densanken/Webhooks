@@ -98,11 +98,24 @@ export const handleUpdateDiscordWebhookModal = async (
 
   let newOwner: DiscordResourceOwner | undefined;
   if (newOwnerId) {
-    const resolved = await resolveGuildMember(
-      deps.env.discordBotToken,
-      guildId,
-      newOwnerId,
-    );
+    let resolved;
+    try {
+      resolved = await resolveGuildMember(
+        deps.env.discordBotToken,
+        guildId,
+        newOwnerId,
+      );
+    } catch {
+      return ephemeralMessage({
+        title: "運用担当者の情報を取得できませんでした",
+        description:
+          "Discord API との通信に失敗しました\nしばらく待ってから再度お試しください",
+        color: EmbedColor.Error,
+        footer: {
+          text: "何度もこのエラーが出る場合、Bot 管理者にお問い合わせください",
+        },
+      });
+    }
 
     if (!resolved) {
       return ephemeralMessage({

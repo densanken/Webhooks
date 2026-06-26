@@ -10,6 +10,7 @@ import { extractFocusedValue } from "../../../util/discord/interaction/extract-f
 import { getUserDisplayName } from "../../../util/discord/interaction/format.ts";
 
 const MAX_CHOICES = 25;
+const UUID_LIKE = /^[0-9a-f-]+$/;
 
 export const handleWebhookTokenAutocomplete = async (
   interaction: APIApplicationCommandAutocompleteInteraction,
@@ -20,6 +21,7 @@ export const handleWebhookTokenAutocomplete = async (
   const admin = isAdmin(member.permissions);
 
   const focusedValue = extractFocusedValue(interaction)?.toLowerCase() ?? "";
+  const uuidSearch = focusedValue.length > 0 && UUID_LIKE.test(focusedValue);
 
   const tokens = await deps.tokenUseCase
     .listDynamicWebhookTokensByGuild(guildId);
@@ -39,7 +41,10 @@ export const handleWebhookTokenAutocomplete = async (
 
   const choices: APIApplicationCommandOptionChoice<string>[] = filtered.map(
     (t) => ({
-      name: `${t.description} / ${t.uuid}`.slice(0, 100),
+      name: (uuidSearch ? `${t.uuid} — ${t.description}` : t.description).slice(
+        0,
+        100,
+      ),
       value: t.uuid,
     }),
   );
