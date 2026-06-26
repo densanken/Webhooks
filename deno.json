@@ -21,7 +21,7 @@
     "@std/crypto": "jsr:@std/crypto@1.1.0",
     "ajv": "npm:ajv@8.20.0",
     "discord-api-types/v10": "npm:discord-api-types@0.38.49/v10",
-    "hono": "npm:hono@4.12.26",
+    "hono": "npm:hono@4.12.27",
     "ts-json-schema-generator": "npm:ts-json-schema-generator@2.9.0"
   }
 }
