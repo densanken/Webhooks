@@ -22,6 +22,7 @@ Deno.test(
     assertEquals(created, {
       uuid: "token-1",
       description: "deploy hook",
+      owner: undefined,
       token,
       createdAt: "2026-06-06T00:00:00.000Z",
       updatedAt: "2026-06-06T00:00:00.000Z",
@@ -29,6 +30,7 @@ Deno.test(
     assertEquals(await usecase.listDynamicWebhookTokens(), [{
       uuid: "token-1",
       description: "deploy hook",
+      owner: undefined,
       createdAt: "2026-06-06T00:00:00.000Z",
       updatedAt: "2026-06-06T00:00:00.000Z",
     }]);
@@ -68,6 +70,7 @@ Deno.test(
     assertEquals(updated, {
       uuid: "token-1",
       description: "original description",
+      owner: undefined,
       createdAt: "2026-06-06T00:00:00.000Z",
       updatedAt: "2026-06-07T00:00:00.000Z",
     });
@@ -97,6 +100,7 @@ Deno.test(
     assertEquals(updated, {
       uuid: "token-1",
       description: "new description",
+      owner: undefined,
       createdAt: "2026-06-06T00:00:00.000Z",
       updatedAt: "2026-06-07T00:00:00.000Z",
     });

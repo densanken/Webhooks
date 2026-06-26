@@ -28,6 +28,7 @@ export class WebhookTokenUseCase implements WebhookTokenUseCaseInterface {
     const record = await this.repository.createDynamicWebhookToken({
       uuid: this.generateUuid(),
       description: input.description,
+      owner: input.owner,
       token,
       now: input.now,
     });
@@ -44,12 +45,19 @@ export class WebhookTokenUseCase implements WebhookTokenUseCaseInterface {
     );
   }
 
+  async getDynamicWebhookToken(uuid: string) {
+    const record = await this.repository.getDynamicWebhookToken(uuid);
+    if (record === null) return null;
+    return toWebhookTokenSummary(record);
+  }
+
   async updateDynamicWebhookToken(
     uuid: string,
     input: UpdateWebhookTokenInput,
   ) {
     const record = await this.repository.updateDynamicWebhookToken(uuid, {
       description: input.description,
+      owner: input.owner,
       now: input.now,
     });
     if (record === null) return null;
@@ -63,5 +71,12 @@ export class WebhookTokenUseCase implements WebhookTokenUseCaseInterface {
 
     await this.repository.deleteDynamicWebhookToken(uuid);
     return true;
+  }
+
+  async listDynamicWebhookTokensByGuild(guildId: string) {
+    const all = await this.repository.listDynamicWebhookTokens();
+    return all
+      .filter((r) => r.owner?.guildId === guildId)
+      .map(toWebhookTokenSummary);
   }
 }

@@ -48,6 +48,7 @@ export class DiscordRegisteredWebhookRepository
     const record = createRegisteredDiscordWebhookKvRecord({
       uuid: input.uuid,
       description: input.description,
+      owner: input.owner,
       encryptedDiscordWebhookUrl: webhookUrlSecret.encryptedUrl,
       discordWebhookUrlHash: webhookUrlSecret.hash,
       encryptedPathToken,
@@ -121,6 +122,7 @@ export class DiscordRegisteredWebhookRepository
       description: input.description === undefined
         ? entry.value.description
         : input.description,
+      owner: input.owner === undefined ? entry.value.owner : input.owner,
       updatedAt: (input.now ?? new Date()).toISOString(),
     });
 

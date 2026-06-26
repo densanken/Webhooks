@@ -45,6 +45,7 @@ export class DiscordRegisteredWebhookUseCase
       this.repository.createRegisteredDiscordWebhook({
         uuid: this.generateUuid(),
         description: input.description,
+        owner: input.owner,
         discordWebhookUrl: input.discordWebhookUrl,
         pathToken,
         now: input.now,
@@ -104,7 +105,7 @@ export class DiscordRegisteredWebhookUseCase
   ) {
     const record = await this.repository.updateRegisteredDiscordWebhook(
       uuid,
-      { description: input.description, now: input.now },
+      { description: input.description, owner: input.owner, now: input.now },
     );
     if (record === null) return null;
 
@@ -117,5 +118,12 @@ export class DiscordRegisteredWebhookUseCase
 
     await this.repository.deleteRegisteredDiscordWebhook(uuid);
     return true;
+  }
+
+  async listRegisteredDiscordWebhooksByGuild(guildId: string) {
+    const all = await this.repository.listRegisteredDiscordWebhooks();
+    return all
+      .filter((r) => r.owner?.guildId === guildId)
+      .map(toRegisteredDiscordWebhookSummary);
   }
 }

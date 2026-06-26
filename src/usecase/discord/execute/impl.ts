@@ -1,4 +1,7 @@
-import { InvalidDiscordWebhookUrlError } from "../../../util/discord/webhook-url.ts";
+import {
+  InvalidDiscordWebhookUrlError,
+  parseDiscordWebhookUrl,
+} from "../../../util/discord/webhook-url.ts";
 import { parseDiscordWebhookJsonRequest } from "../../../util/discord/webhook-body.ts";
 import { verifyBearerTokenHash } from "../../../util/crypto.ts";
 import type { DiscordSendResult } from "../sender/interface.ts";
@@ -13,6 +16,7 @@ import {
   timingSafeStringEqual,
 } from "./auth.ts";
 import type { DiscordExecuteUseCaseOptions } from "./dependencies.ts";
+import { UseCaseError } from "../../error/impl.ts";
 import type {
   DiscordExecuteResult,
   DiscordExecuteUseCaseInterface,
@@ -35,6 +39,8 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
   private readonly rateLimitRepository:
     DiscordExecuteUseCaseOptions["rateLimitRepository"];
   private readonly sender: DiscordExecuteUseCaseOptions["sender"];
+  private readonly guildWebhooksUseCase:
+    DiscordExecuteUseCaseOptions["guildWebhooksUseCase"];
   private readonly generateQueueMessageId: () => string;
   private readonly getNow: () => Date;
 
@@ -44,6 +50,7 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
     this.queueRepository = options.queueRepository;
     this.rateLimitRepository = options.rateLimitRepository;
     this.sender = options.sender;
+    this.guildWebhooksUseCase = options.guildWebhooksUseCase;
     this.generateQueueMessageId = options.generateQueueMessageId ??
       (() => crypto.randomUUID());
     this.getNow = options.getNow ?? (() => new Date());
@@ -90,6 +97,39 @@ export class DiscordExecuteUseCase implements DiscordExecuteUseCaseInterface {
       !await verifyBearerTokenHash(bearerToken, tokenRecord.tokenHash)
     ) {
       throw unauthorizedError("Invalid dynamic webhook token");
+    }
+
+    if (this.guildWebhooksUseCase) {
+      if (!tokenRecord.owner?.guildId) {
+        throw new UseCaseError(
+          "invalid_request",
+          "Dynamic webhook token has no guild association; cannot validate webhook URL",
+          400,
+        );
+      }
+
+      let parsed;
+      try {
+        parsed = parseDiscordWebhookUrl(discordWebhookUrl);
+      } catch (error) {
+        if (error instanceof InvalidDiscordWebhookUrlError) {
+          throw invalidDiscordWebhookUrlError(error.message);
+        }
+        throw error;
+      }
+
+      const allowed = await this.guildWebhooksUseCase
+        .isGuildWebhookWithRefresh(
+          tokenRecord.owner.guildId,
+          parsed.webhookId,
+        );
+      if (!allowed) {
+        throw new UseCaseError(
+          "invalid_request",
+          "Webhook URL is not allowed for this token's guild",
+          400,
+        );
+      }
     }
 
     const body = await parseDiscordWebhookJsonRequest(input.request);

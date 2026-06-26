@@ -102,7 +102,7 @@ export class DiscordWebhookSender implements DiscordSenderPort {
     response: Response,
     body: Record<string, unknown>,
   ): number {
-    const retryAfterFromBody = body.retry_after;
+    const { retry_after: retryAfterFromBody } = body;
     if (typeof retryAfterFromBody === "number") {
       return (
         this.secondsToMilliseconds(retryAfterFromBody) ?? DEFAULT_RETRY_AFTER_MS

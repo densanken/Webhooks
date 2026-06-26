@@ -3,6 +3,7 @@ import type { DiscordRateLimitRepositoryInterface } from "../../../repository/di
 import type { WebhookTokenRepositoryInterface } from "../../../repository/token/interface.ts";
 import type { DiscordRegisteredWebhookRepositoryInterface } from "../../../repository/discord/registered-webhook/interface.ts";
 import type { DiscordSender } from "../sender/interface.ts";
+import type { GuildWebhooksUseCaseInterface } from "../guild-webhook/interface.ts";
 
 export type DiscordExecuteUseCaseOptions = {
   registeredRepository: DiscordRegisteredWebhookRepositoryInterface;
@@ -10,6 +11,7 @@ export type DiscordExecuteUseCaseOptions = {
   queueRepository: DiscordQueueRepositoryInterface;
   rateLimitRepository: DiscordRateLimitRepositoryInterface;
   sender: DiscordSender;
+  guildWebhooksUseCase?: GuildWebhooksUseCaseInterface;
   generateQueueMessageId?: () => string;
   getNow?: () => Date;
 };

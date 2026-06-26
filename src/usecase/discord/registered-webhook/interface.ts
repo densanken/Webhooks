@@ -1,6 +1,9 @@
+import type { DiscordResourceOwner } from "../../../repository/discord/owner.ts";
+
 export type RegisteredDiscordWebhookSummary = {
   uuid: string;
   description: string;
+  owner?: DiscordResourceOwner;
   createdAt: string;
   updatedAt: string;
 };
@@ -15,11 +18,13 @@ export type RegisteredDiscordWebhookDetail =
 export type CreateRegisteredDiscordWebhookInput = {
   discordWebhookUrl: string;
   description: string;
+  owner?: DiscordResourceOwner;
   now?: Date;
 };
 
 export type UpdateRegisteredDiscordWebhookInput = {
   description?: string;
+  owner?: DiscordResourceOwner;
   now?: Date;
 };
 
@@ -47,4 +52,7 @@ export interface DiscordRegisteredWebhookUseCaseInterface {
     input: UpdateRegisteredDiscordWebhookInput,
   ): Promise<RegisteredDiscordWebhookSummary | null>;
   revokeRegisteredDiscordWebhook(uuid: string): Promise<boolean>;
+  listRegisteredDiscordWebhooksByGuild(
+    guildId: string,
+  ): Promise<RegisteredDiscordWebhookSummary[]>;
 }
