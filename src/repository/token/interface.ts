@@ -1,9 +1,12 @@
+import type { DiscordResourceOwner } from "../discord/owner.ts";
+
 export type WebhookTokenRecord = {
   uuid: string;
   description?: string;
   tokenHash: string;
   createdAt: string;
   updatedAt: string;
+  owner?: DiscordResourceOwner;
 };
 
 export type CreateWebhookTokenInput = {
@@ -11,11 +14,13 @@ export type CreateWebhookTokenInput = {
   description?: string;
   token: string;
   now?: Date;
+  owner?: DiscordResourceOwner;
 };
 
 export type UpdateWebhookTokenInput = {
   description?: string;
   now?: Date;
+  owner?: DiscordResourceOwner;
 };
 
 export interface WebhookTokenRepositoryInterface {

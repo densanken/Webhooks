@@ -57,3 +57,23 @@ export const discordRateLimitKey = (
   "rate-limit",
   discordWebhookUrlHash,
 ];
+
+export const discordGuildWebhookCacheKey = (
+  guildId: string,
+  webhookId: string,
+): Deno.KvKey => [
+  "discord",
+  "guild",
+  guildId,
+  "webhook",
+  webhookId,
+];
+
+export const discordGuildWebhookCachePrefix = (
+  guildId: string,
+): Deno.KvKey => [
+  "discord",
+  "guild",
+  guildId,
+  "webhook",
+];

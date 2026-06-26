@@ -1,9 +1,6 @@
-import { assert, assertEquals, assertThrows } from "@std/assert";
+import { assertEquals, assertThrows } from "@std/assert";
 
-import {
-  parseDiscordWebhookUrl,
-  redactDiscordWebhookUrl,
-} from "./webhook-url.ts";
+import { parseDiscordWebhookUrl } from "./webhook-url.ts";
 
 const VALID_DISCORD_WEBHOOK_ID = "12345678901234567";
 const VALID_DISCORD_WEBHOOK_TOKEN = "abcdefghijklmnopqrstuvwxyzABCDEF";
@@ -108,23 +105,4 @@ Deno.test("parseDiscordWebhookUrl は無効な URL 形式を拒否する", () =>
   );
   assertThrows(() => parseDiscordWebhookUrl(`${webhookUrl()}#fragment`));
   assertThrows(() => parseDiscordWebhookUrl(`${webhookUrl()}#`));
-});
-
-Deno.test("redactDiscordWebhookUrl は Discord Webhook トークンを秘匿化する", () => {
-  const redacted = redactDiscordWebhookUrl(
-    `https://discord.com/api/webhooks/${VALID_DISCORD_WEBHOOK_ID}/${VALID_DISCORD_WEBHOOK_TOKEN}`,
-  );
-
-  assertEquals(
-    redacted,
-    `https://discord.com/api/webhooks/${VALID_DISCORD_WEBHOOK_ID}/<redacted>`,
-  );
-  assert(!redacted.includes(VALID_DISCORD_WEBHOOK_TOKEN));
-});
-
-Deno.test("redactDiscordWebhookUrl は無効な URL に対して無効マーカーを返す", () => {
-  assertEquals(
-    redactDiscordWebhookUrl("not-a-url"),
-    "<invalid-discord-webhook-url>",
-  );
 });

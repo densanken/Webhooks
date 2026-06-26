@@ -33,6 +33,7 @@ Deno.test({
       assertEquals(created, {
         uuid: "registered-1",
         description: "production alerts",
+        owner: undefined,
         webhookUrl:
           "https://example.com/discord/webhooks/registered-1/path-token",
         discordWebhookUrl: discordWebhookUrl(),
@@ -43,6 +44,7 @@ Deno.test({
       assertEquals(await usecase.listRegisteredDiscordWebhooks(), [{
         uuid: "registered-1",
         description: "production alerts",
+        owner: undefined,
         createdAt: "2026-06-06T00:00:00.000Z",
         updatedAt: "2026-06-06T00:00:00.000Z",
       }]);
@@ -131,6 +133,7 @@ Deno.test({
       assertEquals(updated, {
         uuid: "registered-1",
         description: "updated description",
+        owner: undefined,
         createdAt: "2026-06-06T00:00:00.000Z",
         updatedAt: "2026-06-07T00:00:00.000Z",
       });

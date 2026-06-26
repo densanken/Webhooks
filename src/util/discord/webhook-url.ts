@@ -4,9 +4,6 @@ const DISCORD_WEBHOOK_HOSTS = new Set(["discord.com", "discordapp.com"]);
 const DISCORD_SNOWFLAKE_PATTERN = /^[1-9]\d{16,18}$/;
 const DISCORD_WEBHOOK_TOKEN_PATTERN = /^[A-Za-z0-9._-]{32,256}$/;
 
-const REDACTED_DISCORD_WEBHOOK_TOKEN = "<redacted>";
-const INVALID_DISCORD_WEBHOOK_URL = "<invalid-discord-webhook-url>";
-
 export class InvalidDiscordWebhookUrlError extends Error {
   constructor(message: string) {
     super(message);
@@ -111,14 +108,4 @@ export const normalizeAndHashDiscordWebhookUrl = async (
     url: parsedUrl.url,
     hash: await hashString(parsedUrl.url),
   };
-};
-
-export const redactDiscordWebhookUrl = (url: string): string => {
-  try {
-    const parsedUrl = parseDiscordWebhookUrl(url);
-
-    return `${parsedUrl.origin}/api/webhooks/${parsedUrl.webhookId}/${REDACTED_DISCORD_WEBHOOK_TOKEN}`;
-  } catch {
-    return INVALID_DISCORD_WEBHOOK_URL;
-  }
 };

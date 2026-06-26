@@ -7,8 +7,13 @@ import { MockDiscordRegisteredWebhookRepository } from "../../../repository/disc
 import {
   discordWebhookUrl,
   ENV_PERMISSION,
+  VALID_DISCORD_WEBHOOK_ID,
   withEncryptionKey,
 } from "../../../test-helper/webhook.ts";
+import type {
+  GuildWebhooksUseCaseInterface,
+  GuildWebhookSyncResult,
+} from "../guild-webhook/interface.ts";
 import {
   DiscordWebhookBodyValidationError,
 } from "../../../util/discord/webhook-body.ts";
@@ -370,6 +375,168 @@ Deno.test({
     });
   },
 });
+
+Deno.test({
+  name:
+    "DiscordExecuteUseCase はギルド未関連付けトークンでもギルド検証をスキップして送信する",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      const tokenRepository = new MockWebhookTokenRepository();
+      const sender = new MockDiscordSender({ ok: true });
+      const guildWebhooksUseCase = new MockGuildWebhooksUseCase(true);
+      const usecase = new DiscordExecuteUseCase({
+        registeredRepository: new MockDiscordRegisteredWebhookRepository(),
+        tokenRepository,
+        queueRepository: new MockDiscordQueueRepository(),
+        rateLimitRepository: new MockDiscordRateLimitRepository(),
+        sender,
+        guildWebhooksUseCase,
+      });
+      const token = "b".repeat(43);
+      await tokenRepository.createDynamicWebhookToken({
+        uuid: "token-no-guild",
+        token,
+      });
+
+      const result = await usecase.executeDynamicDiscordWebhook({
+        request: jsonRequest({ content: "hello" }, {
+          authorization: `Bearer ${token}`,
+          "x-discord-webhook-url": discordWebhookUrl(),
+          "x-webhook-token-id": "token-no-guild",
+        }),
+      });
+
+      assertEquals(result, { status: "sent", statusCode: 204 });
+      assertEquals(guildWebhooksUseCase.calls, []);
+    });
+  },
+});
+
+Deno.test({
+  name:
+    "DiscordExecuteUseCase はギルド関連付け済みトークンで許可された Webhook を送信する",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      const tokenRepository = new MockWebhookTokenRepository();
+      const sender = new MockDiscordSender({ ok: true });
+      const guildWebhooksUseCase = new MockGuildWebhooksUseCase(true);
+      const usecase = new DiscordExecuteUseCase({
+        registeredRepository: new MockDiscordRegisteredWebhookRepository(),
+        tokenRepository,
+        queueRepository: new MockDiscordQueueRepository(),
+        rateLimitRepository: new MockDiscordRateLimitRepository(),
+        sender,
+        guildWebhooksUseCase,
+      });
+      const token = "b".repeat(43);
+      await tokenRepository.createDynamicWebhookToken({
+        uuid: "token-with-guild",
+        token,
+        owner: {
+          guildId: "guild-1",
+          discordUserId: "user-1",
+          username: "test",
+          globalName: null,
+          displayName: null,
+          avatarHash: null,
+          discriminator: "0",
+        },
+      });
+
+      const result = await usecase.executeDynamicDiscordWebhook({
+        request: jsonRequest({ content: "hello" }, {
+          authorization: `Bearer ${token}`,
+          "x-discord-webhook-url": discordWebhookUrl(),
+          "x-webhook-token-id": "token-with-guild",
+        }),
+      });
+
+      assertEquals(result, { status: "sent", statusCode: 204 });
+      assertEquals(guildWebhooksUseCase.calls, [{
+        guildId: "guild-1",
+        webhookId: VALID_DISCORD_WEBHOOK_ID,
+      }]);
+    });
+  },
+});
+
+Deno.test({
+  name: "DiscordExecuteUseCase はギルドに属さない Webhook URL を拒否する",
+  permissions: ENV_PERMISSION,
+  fn: async () => {
+    await withEncryptionKey(async () => {
+      const tokenRepository = new MockWebhookTokenRepository();
+      const sender = new MockDiscordSender({ ok: true });
+      const guildWebhooksUseCase = new MockGuildWebhooksUseCase(false);
+      const usecase = new DiscordExecuteUseCase({
+        registeredRepository: new MockDiscordRegisteredWebhookRepository(),
+        tokenRepository,
+        queueRepository: new MockDiscordQueueRepository(),
+        rateLimitRepository: new MockDiscordRateLimitRepository(),
+        sender,
+        guildWebhooksUseCase,
+      });
+      const token = "b".repeat(43);
+      await tokenRepository.createDynamicWebhookToken({
+        uuid: "token-with-guild",
+        token,
+        owner: {
+          guildId: "guild-1",
+          discordUserId: "user-1",
+          username: "test",
+          globalName: null,
+          displayName: null,
+          avatarHash: null,
+          discriminator: "0",
+        },
+      });
+
+      const error = await assertRejects(
+        () =>
+          usecase.executeDynamicDiscordWebhook({
+            request: jsonRequest({ content: "hello" }, {
+              authorization: `Bearer ${token}`,
+              "x-discord-webhook-url": discordWebhookUrl(),
+              "x-webhook-token-id": "token-with-guild",
+            }),
+          }),
+        UseCaseError,
+      );
+
+      assertEquals(error.code, "invalid_request");
+      assertEquals(error.status, 400);
+      assertEquals(sender.calls, []);
+    });
+  },
+});
+
+class MockGuildWebhooksUseCase implements GuildWebhooksUseCaseInterface {
+  readonly calls: { guildId: string; webhookId: string }[] = [];
+
+  constructor(private readonly allowed: boolean) {}
+
+  syncGuildWebhooks(_guildId: string): Promise<GuildWebhookSyncResult> {
+    throw new Error("not implemented");
+  }
+
+  isGuildWebhook(
+    guildId: string,
+    webhookId: string,
+  ): Promise<boolean> {
+    this.calls.push({ guildId, webhookId });
+    return Promise.resolve(this.allowed);
+  }
+
+  isGuildWebhookWithRefresh(
+    guildId: string,
+    webhookId: string,
+  ): Promise<boolean> {
+    this.calls.push({ guildId, webhookId });
+    return Promise.resolve(this.allowed);
+  }
+}
 
 class MockDiscordSender implements DiscordSender {
   readonly calls: DiscordSendInput[] = [];

@@ -1,4 +1,5 @@
 import type { EncryptedString } from "../../../util/crypto.ts";
+import type { DiscordResourceOwner } from "../owner.ts";
 import type {
   RegisteredDiscordWebhookRecord,
   RegisteredDiscordWebhookSummaryRecord,
@@ -7,6 +8,7 @@ import type {
 export type RegisteredDiscordWebhookKvRecord = {
   uuid: string;
   description?: string;
+  owner?: DiscordResourceOwner;
   encryptedDiscordWebhookUrl: EncryptedString;
   discordWebhookUrlHash: string;
   encryptedPathToken: EncryptedString;
@@ -19,6 +21,7 @@ export const createRegisteredDiscordWebhookKvRecord = (
 ): RegisteredDiscordWebhookKvRecord => ({
   uuid: input.uuid,
   description: input.description,
+  owner: input.owner,
   encryptedDiscordWebhookUrl: input.encryptedDiscordWebhookUrl,
   discordWebhookUrlHash: input.discordWebhookUrlHash,
   encryptedPathToken: input.encryptedPathToken,
@@ -31,6 +34,7 @@ export const toRegisteredDiscordWebhookSummaryRecord = (
 ): RegisteredDiscordWebhookSummaryRecord => ({
   uuid: record.uuid,
   description: record.description,
+  owner: record.owner,
   createdAt: record.createdAt,
   updatedAt: record.updatedAt,
 });

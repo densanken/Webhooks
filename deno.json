@@ -5,7 +5,8 @@
     "fmt": "deno lint --fix && deno fmt",
     "lint": "deno check && deno lint && deno fmt --check",
     "test": "deno test --unstable-kv --allow-env=WEBHOOK_SECRET_ENCRYPTION_KEY_ID,WEBHOOK_SECRET_ENCRYPTION_KEY",
-    "schema:discord": "deno run --allow-env --allow-read --allow-write --node-modules-dir=auto ts-json-schema-generator --path src/schema/discord-webhook-body.ts --type DiscordWebhookBody --out src/generated/discord-webhook-body.schema.json"
+    "schema:discord": "deno run --allow-env --allow-read --allow-write --node-modules-dir=auto ts-json-schema-generator --path src/schema/discord-webhook-body.ts --type DiscordWebhookBody --out src/generated/discord-webhook-body.schema.json",
+    "register-commands": "deno run --env --allow-env --allow-net src/job/interaction/register-commands.ts"
   },
   "fmt": {
     "exclude": [

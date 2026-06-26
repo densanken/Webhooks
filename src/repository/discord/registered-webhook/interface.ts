@@ -1,6 +1,9 @@
+import type { DiscordResourceOwner } from "../owner.ts";
+
 export type RegisteredDiscordWebhookSummaryRecord = {
   uuid: string;
   description?: string;
+  owner?: DiscordResourceOwner;
   createdAt: string;
   updatedAt: string;
 };
@@ -16,6 +19,7 @@ export type RegisteredDiscordWebhookRecord =
 export type CreateRegisteredDiscordWebhookInput = {
   uuid: string;
   description?: string;
+  owner?: DiscordResourceOwner;
   discordWebhookUrl: string;
   pathToken: string;
   now?: Date;
@@ -23,6 +27,7 @@ export type CreateRegisteredDiscordWebhookInput = {
 
 export type UpdateRegisteredDiscordWebhookInput = {
   description?: string;
+  owner?: DiscordResourceOwner;
   now?: Date;
 };
 

@@ -1,3 +1,4 @@
+import type { APIEmbed } from "discord-api-types/v10";
 import type { DiscordQueueRepositoryInterface } from "../../repository/discord/queue/interface.ts";
 import type { DiscordRateLimitRepositoryInterface } from "../../repository/discord/rate-limit/interface.ts";
 import type { DiscordSender } from "../../usecase/discord/sender/interface.ts";
@@ -63,24 +64,24 @@ const buildNotificationBody = (message: DeadMessageSummary): unknown => {
     }`
     : "unknown";
 
+  const embed: APIEmbed = {
+    title: "Dead Letter Alert",
+    color: 0xed4245,
+    description: buildBodyCodeBlock(message.body),
+    fields: [
+      { name: "Queue Message ID", value: message.id, inline: false },
+      {
+        name: "Source",
+        value: `${formatSourceType(message.sourceType)} / ${message.sourceId}`,
+        inline: true,
+      },
+      { name: "Attempts", value: String(message.attempts), inline: true },
+      { name: "Error", value: errorValue, inline: true },
+    ],
+  };
+
   return {
-    embeds: [{
-      title: "Dead Letter Alert",
-      color: 0xed4245,
-      description: buildBodyCodeBlock(message.body),
-      fields: [
-        { name: "Queue Message ID", value: message.id, inline: false },
-        {
-          name: "Source",
-          value: `${
-            formatSourceType(message.sourceType)
-          } / ${message.sourceId}`,
-          inline: true,
-        },
-        { name: "Attempts", value: String(message.attempts), inline: true },
-        { name: "Error", value: errorValue, inline: true },
-      ],
-    }],
+    embeds: [embed],
   };
 };
 

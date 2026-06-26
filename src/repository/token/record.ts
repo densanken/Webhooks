@@ -8,4 +8,5 @@ export const createWebhookTokenRecord = (
   tokenHash: input.tokenHash,
   createdAt: input.createdAt,
   updatedAt: input.updatedAt,
+  owner: input.owner,
 });

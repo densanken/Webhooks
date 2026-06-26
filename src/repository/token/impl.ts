@@ -29,6 +29,7 @@ export class WebhookTokenRepository implements WebhookTokenRepositoryInterface {
       tokenHash: await hashString(input.token),
       createdAt,
       updatedAt: createdAt,
+      owner: input.owner,
     });
 
     const result = await this.kv.atomic()
@@ -82,6 +83,7 @@ export class WebhookTokenRepository implements WebhookTokenRepositoryInterface {
         ? entry.value.description
         : input.description,
       updatedAt: (input.now ?? new Date()).toISOString(),
+      owner: input.owner === undefined ? entry.value.owner : input.owner,
     });
 
     assertAtomicCommit(
