@@ -8,6 +8,7 @@ import {
 } from "discord-api-types/v10";
 import type { InteractionsDependencies } from "../../route.ts";
 import { modalResponse } from "../../response.ts";
+import { DESCRIPTION_MAX_LENGTH } from "../../embed.ts";
 
 export const TOKEN_CREATE_SUBCOMMAND: APIApplicationCommandSubcommandOption = {
   name: "create",
@@ -32,6 +33,7 @@ export const handleCreate = (
             label: "利用目的",
             style: TextInputStyle.Paragraph,
             required: true,
+            max_length: DESCRIPTION_MAX_LENGTH,
           },
         ],
       },

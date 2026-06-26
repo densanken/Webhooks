@@ -13,6 +13,7 @@ import {
   getUserAvatarUrl,
   getUserDisplayName,
 } from "../../../../util/discord/interaction/format.ts";
+import { descriptionTooLongEmbed, isDescriptionTooLong } from "../../embed.ts";
 
 export const handleCreateWebhookTokenModal = async (
   interaction: APIModalSubmitInteraction,
@@ -28,6 +29,10 @@ export const handleCreateWebhookTokenModal = async (
       title: "利用目的を入力してください",
       color: EmbedColor.Error,
     });
+  }
+
+  if (isDescriptionTooLong(description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(description));
   }
 
   const owner = {

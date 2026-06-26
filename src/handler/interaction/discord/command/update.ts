@@ -14,6 +14,11 @@ import {
   notFoundDiscordWebhookEmbed,
 } from "../embed.ts";
 import { formatOwner } from "../../../../util/discord/interaction/format.ts";
+import {
+  DESCRIPTION_MAX_LENGTH,
+  descriptionTooLongEmbed,
+  isDescriptionTooLong,
+} from "../../embed.ts";
 
 export const DISCORD_UPDATE_SUBCOMMAND: APIApplicationCommandSubcommandOption =
   {
@@ -82,6 +87,10 @@ export const handleUpdate = async (
     });
   }
 
+  if (isDescriptionTooLong(detail.description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(detail.description));
+  }
+
   const ownerOption = options.get("owner") as string | undefined;
   const isChangeRequest = ownerOption &&
     detail.owner?.discordUserId !== ownerOption; // 同一オーナーへの変更を避ける
@@ -103,6 +112,7 @@ export const handleUpdate = async (
             label: "この Webhook の利用目的",
             style: TextInputStyle.Paragraph,
             required: true,
+            max_length: DESCRIPTION_MAX_LENGTH,
             value: detail.description,
           },
         ],

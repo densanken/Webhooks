@@ -8,6 +8,7 @@ import {
 } from "discord-api-types/v10";
 import type { InteractionsDependencies } from "../../route.ts";
 import { modalResponse } from "../../response.ts";
+import { DESCRIPTION_MAX_LENGTH } from "../../embed.ts";
 
 export const DISCORD_CREATE_SUBCOMMAND: APIApplicationCommandSubcommandOption =
   {
@@ -46,6 +47,7 @@ export const handleCreate = (
             label: "この Webhook の利用目的",
             style: TextInputStyle.Paragraph,
             required: true,
+            max_length: DESCRIPTION_MAX_LENGTH,
             placeholder: "〇〇フォームの通知用",
           },
         ],

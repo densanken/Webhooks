@@ -21,6 +21,7 @@ import {
 } from "../../response.ts";
 import type { GuildContext, InteractionsDependencies } from "../../route.ts";
 import { notFoundDiscordWebhookEmbed } from "../embed.ts";
+import { descriptionTooLongEmbed, isDescriptionTooLong } from "../../embed.ts";
 
 export const handleUpdateDiscordWebhookModal = async (
   interaction: APIModalSubmitInteraction,
@@ -80,6 +81,10 @@ export const handleUpdateDiscordWebhookModal = async (
         text: "何度もこのエラーが出る場合、Bot 管理者にお問い合わせください",
       },
     });
+  }
+
+  if (isDescriptionTooLong(description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(description));
   }
 
   if (

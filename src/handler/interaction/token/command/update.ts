@@ -11,6 +11,11 @@ import { isAdmin, isGuildMatch, isOwner } from "../../permissions.ts";
 import { noInputTokenUUIDEmbed, notFoundTokenEmbed } from "../embed.ts";
 import { EmbedColor, ephemeralMessage, modalResponse } from "../../response.ts";
 import { formatOwner } from "../../../../util/discord/interaction/format.ts";
+import {
+  DESCRIPTION_MAX_LENGTH,
+  descriptionTooLongEmbed,
+  isDescriptionTooLong,
+} from "../../embed.ts";
 
 export const TOKEN_UPDATE_SUBCOMMAND: APIApplicationCommandSubcommandOption = {
   name: "update",
@@ -75,6 +80,10 @@ export const handleUpdate = async (
     });
   }
 
+  if (isDescriptionTooLong(detail.description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(detail.description));
+  }
+
   const ownerOption = options.get("owner") as string | undefined;
   const isChangeRequest = ownerOption &&
     detail.owner?.discordUserId !== ownerOption; // 同一オーナーへの変更を避ける
@@ -96,6 +105,7 @@ export const handleUpdate = async (
             label: "この Token の利用目的",
             style: TextInputStyle.Paragraph,
             required: true,
+            max_length: DESCRIPTION_MAX_LENGTH,
             value: detail.description,
           },
         ],

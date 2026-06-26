@@ -21,6 +21,7 @@ import {
 } from "../../../../util/discord/interaction/format.ts";
 import { resolveGuildMember } from "../../../../util/discord/interaction/resolve-guild-member.ts";
 import { notFoundTokenEmbed } from "../embed.ts";
+import { descriptionTooLongEmbed, isDescriptionTooLong } from "../../embed.ts";
 
 export const handleUpdateWebhookTokenModal = async (
   interaction: APIModalSubmitInteraction,
@@ -75,6 +76,10 @@ export const handleUpdateWebhookTokenModal = async (
         text: "何度もこのエラーが出る場合、Bot 管理者にお問い合わせください",
       },
     });
+  }
+
+  if (isDescriptionTooLong(description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(description));
   }
 
   if (

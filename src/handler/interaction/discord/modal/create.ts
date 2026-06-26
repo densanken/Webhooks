@@ -17,6 +17,7 @@ import {
   ephemeralMessage,
 } from "../../response.ts";
 import type { GuildContext, InteractionsDependencies } from "../../route.ts";
+import { descriptionTooLongEmbed, isDescriptionTooLong } from "../../embed.ts";
 
 export const handleCreateDiscordWebhookModal = async (
   interaction: APIModalSubmitInteraction,
@@ -33,6 +34,10 @@ export const handleCreateDiscordWebhookModal = async (
       title: "すべての項目を入力してください",
       color: EmbedColor.Error,
     });
+  }
+
+  if (isDescriptionTooLong(description)) {
+    return ephemeralMessage(descriptionTooLongEmbed(description));
   }
 
   let parsed;
