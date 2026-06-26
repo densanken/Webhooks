@@ -15,10 +15,14 @@ const COMMAND: RESTPostAPIApplicationGuildCommandsJSONBody = {
 const main = async () => {
   const applicationId = Deno.env.get("DISCORD_APPLICATION_ID")?.trim();
   const botToken = Deno.env.get("DISCORD_BOT_TOKEN")?.trim();
+  const hideGuildIds = Deno.env.get("CI") === "true";
   const allowedGuildIds = (Deno.env.get("DISCORD_ALLOWED_GUILD_IDS") ?? "")
     .split(",")
     .map((id) => id.trim())
     .filter((id) => id !== "");
+
+  const formatGuildForLog = (guildId: string) =>
+    hideGuildIds ? "guild" : `guild ${guildId}`;
 
   if (!applicationId || !botToken) {
     console.error(
@@ -72,19 +76,25 @@ const main = async () => {
     if (!response.ok) {
       const body = await response.text();
       console.error(
-        `Failed to register commands for guild ${guildId}: ${response.status} ${body}`,
+        `Failed to register commands for ${
+          formatGuildForLog(guildId)
+        }: ${response.status} ${body}`,
       );
       failedGuildIds.push(guildId);
       continue;
     }
 
     await response.body?.cancel();
-    console.log(`Registered commands for guild ${guildId}`);
+    console.log(`Registered commands for ${formatGuildForLog(guildId)}`);
   }
 
   if (failedGuildIds.length > 0) {
     console.error(
-      `Command registration failed for guilds: ${failedGuildIds.join(", ")}`,
+      hideGuildIds
+        ? `Command registration failed for ${failedGuildIds.length} guild(s)`
+        : `Command registration failed for guilds: ${
+          failedGuildIds.join(", ")
+        }`,
     );
     Deno.exit(1);
   }
