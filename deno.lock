@@ -5,7 +5,7 @@
     "jsr:@std/crypto@1.1.0": "1.1.0",
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "npm:@hono/oauth-providers@0.8.5": "0.8.5_hono@4.12.30",
-    "npm:@hono/zod-openapi@1.5.0": "1.5.0_hono@4.12.30_zod@4.4.3",
+    "npm:@hono/zod-openapi@1.5.1": "1.5.1_hono@4.12.30_zod@4.4.3",
     "npm:@scalar/hono-api-reference@0.11.9": "0.11.9_hono@4.12.30",
     "npm:ajv@8.20.0": "8.20.0",
     "npm:discord-api-types@0.38.49": "0.38.49",
@@ -40,8 +40,8 @@
         "hono"
       ]
     },
-    "@hono/zod-openapi@1.5.0_hono@4.12.30_zod@4.4.3": {
-      "integrity": "sha512-/clSBZWBht7G4SItlTo+4ElbdIUw+987kZYttaUUJWksJoqK905z1pBNTwoJm/P1ibA2ka8nNbqb39eOlreH2g==",
+    "@hono/zod-openapi@1.5.1_hono@4.12.30_zod@4.4.3": {
+      "integrity": "sha512-ZaDdEIkn6PEGjIYHXJeyByg6yhvLzI+UXn968pWtahpwcQ6HMjQYXI3zNffTl0Wl9QZ79nUnGqiN1erEIu23fA==",
       "dependencies": [
         "@asteasolutions/zod-to-openapi",
         "@hono/zod-validator",
@@ -50,8 +50,8 @@
         "zod"
       ]
     },
-    "@hono/zod-validator@0.8.0_hono@4.12.30_zod@4.4.3": {
-      "integrity": "sha512-5uS4S1/LKtZQYvD4BtpPUFkOv8d1wNxHHrChm26buMiEYc1FrHWvDUaKVBwkiVtvSExHSpLGDvcnpI2Copyj9w==",
+    "@hono/zod-validator@0.9.0_hono@4.12.30_zod@4.4.3": {
+      "integrity": "sha512-n0ZSXmCiHVIp4Y5wlOOyZCeTd/rsawA/qW1cipB8QOYKZ9N8Tk0nZUZCXho9cu374AN4JpDNKioNKBJ/W+LBug==",
       "dependencies": [
         "hono",
         "zod"
@@ -226,7 +226,7 @@
       "jsr:@std/assert@1.0.19",
       "jsr:@std/crypto@1.1.0",
       "npm:@hono/oauth-providers@0.8.5",
-      "npm:@hono/zod-openapi@1.5.0",
+      "npm:@hono/zod-openapi@1.5.1",
       "npm:@scalar/hono-api-reference@0.11.9",
       "npm:ajv@8.20.0",
       "npm:discord-api-types@0.38.49",
