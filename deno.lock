@@ -4,7 +4,7 @@
     "jsr:@std/assert@1.0.19": "1.0.19",
     "jsr:@std/crypto@1.1.0": "1.1.0",
     "jsr:@std/internal@^1.0.12": "1.0.14",
-    "npm:@hono/oauth-providers@0.8.5": "0.8.5_hono@4.12.30",
+    "npm:@hono/oauth-providers@0.8.6": "0.8.6_hono@4.12.30",
     "npm:@hono/zod-openapi@1.5.1": "1.5.1_hono@4.12.30_zod@4.4.3",
     "npm:@scalar/hono-api-reference@0.11.9": "0.11.9_hono@4.12.30",
     "npm:ajv@8.20.0": "8.20.0",
@@ -34,8 +34,8 @@
         "zod"
       ]
     },
-    "@hono/oauth-providers@0.8.5_hono@4.12.30": {
-      "integrity": "sha512-hgEDH/gUmB/opman9jvT8dLItZsSC9M9yFiaam0b6InK7WQkdzIcaRAkdda47QpixnK9S1Ah2vjDB2U16LkMnA==",
+    "@hono/oauth-providers@0.8.6_hono@4.12.30": {
+      "integrity": "sha512-Xb75rfb88+7GglWP53d9guII1B4I3u1EFE76fQTGyAuztYTFG6VCTnxBjLxI9W7hkpmKT4qdzAOL5rYGMPQpsQ==",
       "dependencies": [
         "hono"
       ]
@@ -225,7 +225,7 @@
     "dependencies": [
       "jsr:@std/assert@1.0.19",
       "jsr:@std/crypto@1.1.0",
-      "npm:@hono/oauth-providers@0.8.5",
+      "npm:@hono/oauth-providers@0.8.6",
       "npm:@hono/zod-openapi@1.5.1",
       "npm:@scalar/hono-api-reference@0.11.9",
       "npm:ajv@8.20.0",
