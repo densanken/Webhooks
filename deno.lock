@@ -5,7 +5,7 @@
     "jsr:@std/crypto@1.1.0": "1.1.0",
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "npm:@hono/oauth-providers@0.8.6": "0.8.6_hono@4.12.32",
-    "npm:@hono/zod-openapi@1.5.1": "1.5.1_hono@4.12.32",
+    "npm:@hono/zod-openapi@1.5.1": "1.5.1_hono@4.12.32_zod@4.4.3",
     "npm:@scalar/hono-api-reference@0.11.9": "0.11.9_hono@4.12.32",
     "npm:ajv@8.20.0": "8.20.0",
     "npm:discord-api-types@0.38.52": "0.38.52",
@@ -40,7 +40,7 @@
         "hono"
       ]
     },
-    "@hono/zod-openapi@1.5.1_hono@4.12.32": {
+    "@hono/zod-openapi@1.5.1_hono@4.12.32_zod@4.4.3": {
       "integrity": "sha512-ZaDdEIkn6PEGjIYHXJeyByg6yhvLzI+UXn968pWtahpwcQ6HMjQYXI3zNffTl0Wl9QZ79nUnGqiN1erEIu23fA==",
       "dependencies": [
         "@asteasolutions/zod-to-openapi",
@@ -109,8 +109,8 @@
     "balanced-match@4.0.4": {
       "integrity": "sha512-BLrgEcRTwX2o6gGxGOCNyMvGSp35YofuYzw9h1IMTRmKqttAZZVU67bdb9Pr2vUHA8+j3i2tJfjO6C6+4myGTA=="
     },
-    "brace-expansion@5.0.8": {
-      "integrity": "sha512-JZyDyq3D4AUifKTPOB7DELf6XsB3WdPuNxCtob1vFXPsSXhdAiHBWJ/tJ8HAc9aH84BK+5JFZLNkJKx3G9kzQg==",
+    "brace-expansion@5.0.9": {
+      "integrity": "sha512-ScQ4IuvIEF1TMlP7Zt+vjJ//9zlPb2SDcxWxM3bk8s6t6GGdJ7KO1dCcTidOPJKePW30LE/2cT7wCyPho9/Wxg==",
       "dependencies": [
         "balanced-match"
       ]
@@ -148,8 +148,8 @@
     "lru-cache@11.5.2": {
       "integrity": "sha512-4pfM1Ff0x50o0tQwb5ucw/RzNyD0/YJME6IVcStalZuMWxdt3sR3huStTtxz4PUmvZfRguvDejasvQ2kifR11g=="
     },
-    "minimatch@10.2.5": {
-      "integrity": "sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==",
+    "minimatch@10.2.6": {
+      "integrity": "sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==",
       "dependencies": [
         "brace-expansion"
       ]
@@ -164,8 +164,8 @@
     "normalize-path@3.0.0": {
       "integrity": "sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA=="
     },
-    "openapi3-ts@4.6.0": {
-      "integrity": "sha512-a4sfn6L2sIShhtzJqmjGrARvxAW/3F2BJDdyRVvNF9VhAsZSh5hSyI3a9TNvmzBxXmq66nY5LNT5bQcBxYAZZg==",
+    "openapi3-ts@4.6.1": {
+      "integrity": "sha512-XW9MOldkhoICNeXVzzmXzmOW5G73ppOEGmh7fLCqHjgfdEYCGGN+00MlVCeUZgovjjfC56j9tvtDt1zGabNjjA==",
       "dependencies": [
         "yaml"
       ]
