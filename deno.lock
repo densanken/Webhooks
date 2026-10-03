@@ -6,7 +6,7 @@
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "npm:@hono/oauth-providers@0.9.0": "0.9.0_hono@4.13.8",
     "npm:@hono/zod-openapi@1.6.3": "1.6.3_hono@4.13.8",
-    "npm:@scalar/hono-api-reference@0.12.2": "0.12.2_hono@4.13.8",
+    "npm:@scalar/hono-api-reference@0.12.8": "0.12.8_hono@4.13.8",
     "npm:ajv@8.20.0": "8.20.0",
     "npm:discord-api-types@0.38.55": "0.38.55",
     "npm:hono@4.13.8": "4.13.8",
@@ -57,33 +57,34 @@
         "zod"
       ]
     },
-    "@scalar/client-side-rendering@0.4.1": {
-      "integrity": "sha512-4Ha2ihIPFwmhheSU6U9DlpjgRQ2YOqq2JSmc4ubT2ERApaA/HzuZ1IMyLXDvRICI+KbDducfGw5th9O+TQf+6A==",
+    "@scalar/client-side-rendering@0.4.7": {
+      "integrity": "sha512-iBn6B92M0p59K3PQUTawvolK5UlfuMdxuBJt59g0as3HCbNm4m2KpTh0tTj5Y2XQpslv9nN6q0jJEseVdtDayA==",
       "dependencies": [
+        "@scalar/helpers",
         "@scalar/schemas",
         "@scalar/types",
         "@scalar/validation"
       ]
     },
-    "@scalar/helpers@0.12.0": {
-      "integrity": "sha512-rcX0rFLiWWc0VBr/E+HkatubL0I0ZzxASQkd3032NWEMAEfNd2TiJ9kH46HwbSAOOl696ghxymWegjpjjvxwzA=="
+    "@scalar/helpers@0.16.0": {
+      "integrity": "sha512-lCBNB3hN8sGfUghz5AK5r63G+1/x4PHSgjH9asJVWne5e1tnKkti5eaejPLgy8didpAZsyXEp744xIosoWu9AA=="
     },
-    "@scalar/hono-api-reference@0.12.2_hono@4.13.8": {
-      "integrity": "sha512-VrdMxw/HmejceR9rH0eu4uYKWBILnts5Qj2tgzplufoQbPc+FiFsRKGQ9ZNtZ4CZuvrhEj1y/HrmBX5Zz2sqpg==",
+    "@scalar/hono-api-reference@0.12.8_hono@4.13.8": {
+      "integrity": "sha512-7GuzgdUgRwqr5n/vt/9KXpoDxy5WHNMQsTs3HGBkXpdwKAUFRTaQoMnbF2UydMB0c80uRPK1wMhZunYEoUVZ2A==",
       "dependencies": [
         "@scalar/client-side-rendering",
         "hono"
       ]
     },
-    "@scalar/schemas@0.10.0": {
-      "integrity": "sha512-jFqfd+oqqlTfs87V+QkIrR9DiRv+/h1x3GzSGbGe1qrM6togeXwvVG4aurn+LZ+Ej9of54/6FmoI8DPuLOKx7A==",
+    "@scalar/schemas@0.12.2": {
+      "integrity": "sha512-LIqqT0G7Chj57h1XY1FC3mOJriqNvPOg41V8NOsWGP/VCHCL/lg6K+D3ejwUg4mYNR3TTYaQARlr630mzqKgDA==",
       "dependencies": [
         "@scalar/helpers",
         "@scalar/validation"
       ]
     },
-    "@scalar/types@0.20.0": {
-      "integrity": "sha512-+05slk/Q6MRMqEQt6eM77Jt9DnDPAvfcc/6r7mbrXhIqJSp3oAPrixpAnp1knBSlFaxgixcK/GMKw9QDfD+Zgg==",
+    "@scalar/types@0.22.3": {
+      "integrity": "sha512-Ai+NPBJPhuvqkR5EXsJPK7RAnP7SBhSOyxEhuGqShgUutHoMQ7Vl7tvzVvhuqbXvtAxdBUEhUe57B6kI8Xg+dg==",
       "dependencies": [
         "@scalar/helpers",
         "nanoid",
@@ -91,8 +92,8 @@
         "zod"
       ]
     },
-    "@scalar/validation@0.6.3": {
-      "integrity": "sha512-j3s9XPv8Wo1EG5/naBi4XGF0uXYQ2A3QZNI0NKWgCMxRHVrDJGlZEYymcHDHY7fquRm73P8U3c8xqJqB5yad6w=="
+    "@scalar/validation@0.6.5": {
+      "integrity": "sha512-t/dtbqesbOLsTusFI2kXfiFEQOiZC7+oAY+jZnE82Y64xLamo/1KrZpta8GkuAfIHyeOHOx5bDFid04eO13MIg=="
     },
     "@types/json-schema@7.0.15": {
       "integrity": "sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA=="
@@ -203,8 +204,8 @@
     "tslib@2.8.1": {
       "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="
     },
-    "type-fest@5.9.0": {
-      "integrity": "sha512-yANm3Jr3GiJ1qgJlxGAVxTOIcEOk1rhQHamlXtnrCK7EHP4HeM9OGxtMg/W7HFdrVzw/ZWJKGVIJusVH85sLtw==",
+    "type-fest@5.10.0": {
+      "integrity": "sha512-NoSdpq/WEiAg5sjmBkmV/hfxv6HJH4NqPNrqjtSO5CwRmpsDfaf4begxW34KdJykH/l1yHtwBWQkCRdoXO8mPA==",
       "dependencies": [
         "tagged-tag"
       ]
@@ -227,7 +228,7 @@
       "jsr:@std/crypto@1.1.0",
       "npm:@hono/oauth-providers@0.9.0",
       "npm:@hono/zod-openapi@1.6.3",
-      "npm:@scalar/hono-api-reference@0.12.2",
+      "npm:@scalar/hono-api-reference@0.12.8",
       "npm:ajv@8.20.0",
       "npm:discord-api-types@0.38.55",
       "npm:hono@4.13.8",
